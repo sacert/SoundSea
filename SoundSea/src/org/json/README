@@ -1,0 +1,74 @@
+JSON in Java [package org.json]
+
+JSON is a light-weight, language independent, data interchange format.
+See http://www.JSON.org/
+
+The files in this package implement JSON encoders/decoders in Java.
+It also includes the capability to convert between JSON and XML, HTTP
+headers, Cookies, and CDL.
+
+This is a reference implementation. There is a large number of JSON packages
+in Java. Perhaps someday the Java community will standardize on one. Until
+then, choose carefully.
+
+The license includes this restriction: "The software shall be used for good,
+not evil." If your conscience cannot live with that, then choose a different
+package.
+
+The package compiles on Java 1.8.
+
+
+JSONObject.java: The JSONObject can parse text from a String or a JSONTokener
+to produce a map-like object. The object provides methods for manipulating its
+contents, and for producing a JSON compliant object serialization.
+
+JSONArray.java: The JSONObject can parse text from a String or a JSONTokener
+to produce a vector-like object. The object provides methods for manipulating
+its contents, and for producing a JSON compliant array serialization.
+
+JSONTokener.java: The JSONTokener breaks a text into a sequence of individual
+tokens. It can be constructed from a String, Reader, or InputStream.
+
+JSONException.java: The JSONException is the standard exception type thrown
+by this package.
+
+
+JSONString.java: The JSONString interface requires a toJSONString method,
+allowing an object to provide its own serialization.
+
+JSONStringer.java: The JSONStringer provides a convenient facility for
+building JSON strings.
+
+JSONWriter.java: The JSONWriter provides a convenient facility for building
+JSON text through a writer.
+
+
+CDL.java: CDL provides support for converting between JSON and comma
+delimited lists.
+
+Cookie.java: Cookie provides support for converting between JSON and cookies.
+
+CookieList.java: CookieList provides support for converting between JSON and
+cookie lists.
+
+HTTP.java: HTTP provides support for converting between JSON and HTTP headers.
+
+HTTPTokener.java: HTTPTokener extends JSONTokener for parsing HTTP headers.
+
+XML.java: XML provides support for converting between JSON and XML.
+
+JSONML.java: JSONML provides support for converting between JSONML and XML.
+
+XMLTokener.java: XMLTokener extends JSONTokener for parsing XML text.
+
+Unit tests are maintained in a separate project. Contributing developers can test JSON-java pull requests with the code in this project: https://github.com/stleary/JSON-Java-unit-test
+
+Release history:
+
+20151123    JSONObject and JSONArray initialization with generics. Contains the
+latest code as of 23 Nov, 2015.
+
+20150729    Checkpoint for Maven central repository release. Contains the latest code as of 29 July, 2015. 
+
+JSON-java releases can be found by searching the Maven repository for groupId "org.json" and artifactId "json". For example: 
+https://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22org.json%22%20AND%20a%3A%22json%22
