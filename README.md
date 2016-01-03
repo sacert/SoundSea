@@ -4,6 +4,8 @@ Allows the user to download songs by entering in either the song's title or lyri
 
 *Note*: Only tested to work on MAC OS X
 
+![alt tag](https://raw.github.com/sacert/SoundSea/master/SoundSeaDemo.gif)
+
 #####Modules implemented so far:
    - Allows searching of songs using search key
    - Allows downloading of songs
@@ -22,4 +24,3 @@ Allows the user to download songs by entering in either the song's title or lyri
    - ffmpeg
    - youtube-dl
    
-![alt tag](https://raw.github.com/sacert/SoundSea/master/SoundSeaDemo.gif)
