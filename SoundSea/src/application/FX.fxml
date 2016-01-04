@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.scene.image.*?>
@@ -8,36 +9,54 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.BorderPane?>
 
-<Pane prefHeight="193.0" prefWidth="484.0" styleClass="rootPane" stylesheets="@application.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.FXController">
+<Pane prefHeight="198.0" prefWidth="484.0" styleClass="rootPane" stylesheets="@application.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.FXController">
    <children>
-      <TextField fx:id="getSearchField" layoutX="21.0" layoutY="25.0" prefHeight="55.0" prefWidth="268.0" promptText="Search" styleClass="searchBar" stylesheets="@application.css">
+      <TextField fx:id="getSearchField" layoutX="18.0" layoutY="34.0" prefHeight="55.0" prefWidth="268.0" promptText="Search" styleClass="searchBar" stylesheets="@application.css">
          <font>
             <Font size="33.0" />
          </font>
       </TextField>
-      <ImageView fx:id="albumArt" fitHeight="159.0" fitWidth="159.0" layoutX="307.0" layoutY="18.0" pickOnBounds="true" preserveRatio="true" styleClass="coverArtViewer" />
-      <Button fx:id="getSearchButton" layoutX="159.0" layoutY="102.0" mnemonicParsing="false" onAction="#handleSearchAction" prefHeight="26.0" prefWidth="130.0" stylesheets="@application.css" text="Search" textFill="#787878">
+      <ImageView fx:id="albumArt" fitHeight="159.0" fitWidth="159.0" layoutX="304.0" layoutY="27.0" pickOnBounds="true" preserveRatio="true" styleClass="coverArtViewer" />
+      <Button fx:id="getSearchButton" layoutX="156.0" layoutY="111.0" mnemonicParsing="false" onAction="#handleSearchAction" prefHeight="26.0" prefWidth="130.0" stylesheets="@application.css" text="Search" textFill="#787878">
          <styleClass>
             <String fx:value="buttons" />
             <String fx:value="buttonClick" />
          </styleClass>
       </Button>
-      <Button fx:id="getLyricsButton" layoutX="21.0" layoutY="102.0" mnemonicParsing="false" onAction="#handleQuickDownloadAction" prefHeight="26.0" prefWidth="130.0" stylesheets="@application.css" text="Quick Download" textFill="#787878">
+      <Button fx:id="getLyricsButton" layoutX="18.0" layoutY="111.0" mnemonicParsing="false" onAction="#handleQuickDownloadAction" prefHeight="26.0" prefWidth="130.0" stylesheets="@application.css" text="Quick Download" textFill="#787878">
          <styleClass>
             <String fx:value="buttons" />
             <String fx:value="buttonClick" />
          </styleClass>
       </Button>
-      <Button fx:id="downloadButton" layoutX="266.0" layoutY="146.0" mnemonicParsing="false" onAction="#handleDownloadAction" prefHeight="23.0" prefWidth="23.0" stylesheets="@application.css">
+      <Button fx:id="downloadButton" layoutX="263.0" layoutY="155.0" mnemonicParsing="false" onAction="#handleDownloadAction" prefHeight="23.0" prefWidth="23.0" stylesheets="@application.css">
          <styleClass>
             <String fx:value="downloadButton" />
             <String fx:value="buttons" />
          </styleClass>
       </Button>
-      <Pane layoutX="21.0" layoutY="146.0" prefHeight="22.0" prefWidth="234.0" styleClass="buttons" stylesheets="@application.css">
+      <Pane layoutX="18.0" layoutY="155.0" prefHeight="22.0" prefWidth="234.0" styleClass="buttons" stylesheets="@application.css">
          <children>
             <Text fx:id="songLabelText" fill="#787878" layoutX="7.0" layoutY="17.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="218.68292617797852" />
          </children>
       </Pane>
+      <Button layoutX="451.0" layoutY="7.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="18.0" scaleX="0.8" scaleY="0.8" stylesheets="@application.css">
+         <styleClass>
+            <String fx:value="menuButton" />
+            <String fx:value="closeButton" />
+         </styleClass>
+         <padding>
+            <Insets top="2.0" />
+         </padding>
+      </Button>
+      <Button layoutX="429.0" layoutY="7.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="18.0" scaleX="0.8" scaleY="0.8" stylesheets="@application.css">
+         <styleClass>
+            <String fx:value="menuButton" />
+            <String fx:value="minimizeButton" />
+         </styleClass>
+         <padding>
+            <Insets top="2.0" />
+         </padding>
+      </Button>
    </children>
 </Pane>

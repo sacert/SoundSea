@@ -184,9 +184,11 @@ public class FXController implements Initializable {
 	
 	static List<String> googleImageSearchQueryResults () throws IOException{
 
-		albumTitle = albumTitle.replace("\"", "");
-		albumYear = albumTitle.substring(albumTitle.length()-5, albumTitle.length()-1);
-		albumTitle = albumTitle.substring(0, albumTitle.length()-7);		
+		if(albumTitle != songTitle) {
+			albumTitle = albumTitle.replace("\"", "");
+			albumYear = albumTitle.substring(albumTitle.length()-5, albumTitle.length()-1);
+			albumTitle = albumTitle.substring(0, albumTitle.length()-7);	
+		}
 		
 		imageURLs.clear();
 		URL url = new URL(
@@ -195,6 +197,11 @@ public class FXController implements Initializable {
 						+ albumTitle.replace(" ", "%20")
 						+ "%20album%20cover%20art"
 						+ "&userip=&searchType=image&alt=json");
+		
+		System.out.println(url.toString());
+		if(albumTitle == songTitle) {
+			albumTitle = "";
+		}
 		
 		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("GET");
@@ -226,8 +233,14 @@ public class FXController implements Initializable {
 		bandArtist = breakTitle[0];
 		songTitle = breakTitle[1];
 		
-		Element q = doc.select("div.album-panel").get(0).child(1);
-		albumTitle = q.text();
+		// if album title not shown on azlyrics, set album title to blank
+		if(doc.select("div.album-panel").size() != 0) {
+			Element q = doc.select("div.album-panel").get(0).child(1);
+			albumTitle = q.text();
+		}
+		else {
+			albumTitle = songTitle;
+		}
 
 		// get each line
 		Element p = doc.select("div").get(22);
@@ -304,6 +317,8 @@ public class FXController implements Initializable {
 		albumArt.setImage(image);
 		
 	}
+	
+	
 	
 }
 
