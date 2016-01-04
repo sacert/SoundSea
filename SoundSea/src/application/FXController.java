@@ -34,13 +34,14 @@ import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
 import org.json.*;
 
 public class FXController implements Initializable {
 
-	private final static String azlyrics = "azlyrics.com";
-	private final static String youtube = "www.youtube.com";
+	public final static String azlyrics = "azlyrics.com";
+	public final static String youtube = "www.youtube.com";
 
 	@FXML private TextArea lyricBox;
 	@FXML private TextField getSearchField;
@@ -55,8 +56,8 @@ public class FXController implements Initializable {
 	public static String albumYear = "";
 	
 	public static List<String> googleImgURLResults = null;
-	private List<String> YoutubeURL = new ArrayList<String>();
-	private static List<String> imageURLs = new ArrayList<String>();
+	public static List<String> YoutubeURL = new ArrayList<String>();
+	public static List<String> imageURLs = new ArrayList<String>();
 
 	@FXML
 	private void handleQuickDownloadAction(ActionEvent event) throws IOException, InterruptedException  {
@@ -96,45 +97,16 @@ public class FXController implements Initializable {
 	
 	@FXML
 	private void handleSearchAction(ActionEvent event) throws IOException, InterruptedException  {
-
-		// To do: add pop-up prompting the user for input
-		if(getSearchField.getText().isEmpty()) {
-			return;
-		}
-		
-		String query = getSearchField.getText();
-		List<String> googleURLResults = null;
-		
-		// get lyrics for song
-		googleURLResults = googleSearchQueryResults(azlyrics,query);
-		List<String> lyricsURL;
-		lyricsURL = getSongLyricsFromAZLyrics(googleURLResults.get(0)); // Parse from the FIRST result.
-		printLyricsToUI(lyricsURL);
-		
-		// get youtube link for song
-		googleURLResults = googleSearchQueryResults(youtube,query);
-		YoutubeURL.add(googleURLResults.get(0));
-		YoutubeURL.set(0, YoutubeURL.get(0).replace("https://www.youtube.com/watch%3Fv%3D", "")); 
-		googleImgURLResults = googleImageSearchQueryResults();
-		songLabelText.setText(songFullTitle);
-		
-		albumArt.setImage(null);
-
-		// set cover art album image in window
-		URL coverArtUrl = new URL(imageURLs.get(0));
-		BufferedImage img = ImageIO.read(coverArtUrl);
-		Image image = SwingFXUtils.toFXImage(img, null);
-		albumArt.setImage(image);
+		SearchThread st = new SearchThread(getSearchField, songLabelText, albumArt);
+		st.start();
 	}
 	
 	@FXML
 	private void handleDownloadAction(ActionEvent event) throws IOException, InterruptedException  {
 		
-		// To do: add pop-up prompting the user for input
 		if(songLabelText.getText().isEmpty()) {
 			return;
 		}
-
 		downloadSong(YoutubeURL.get(0));
 	}
 	
@@ -142,9 +114,6 @@ public class FXController implements Initializable {
 		
 		DownloadThread dt = new DownloadThread(songFullTitle, youtubeReference);
 		dt.start();
-		
-		// do you need to join threads in Java? 
-		// look into it later
 	}
 
 	static List<String> googleSearchQueryResults (String websiteToGetLyricsFrom, String lyricsQuery) throws IOException{
@@ -255,7 +224,7 @@ public class FXController implements Initializable {
 		return lyrics;
 	}
 
-	public  void printLyricsToUI(List<String> lyrics) {
+	public static  void printLyricsToUI(List<String> lyrics) {
 
 		for(int i = 0; i < lyrics.size(); i++) {
 			//lyricBox.setText(lyricBox.getText() + lyrics.get(i));
@@ -298,6 +267,17 @@ public class FXController implements Initializable {
 		title = title.replace("  ", " ");
 		
 		return title;
+	}
+	
+	@FXML
+	private void handleCloseAction(ActionEvent event) {
+		System.exit(0);
+	}
+	
+	@FXML
+	private void handleMinimizeAction(ActionEvent event) {
+		Stage stage = (Stage)((Button)event.getSource()).getScene().getWindow();
+		stage.setIconified(true);
 	}
 
 	@Override

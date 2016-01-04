@@ -40,7 +40,7 @@
             <Text fx:id="songLabelText" fill="#787878" layoutX="7.0" layoutY="17.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="218.68292617797852" />
          </children>
       </Pane>
-      <Button layoutX="451.0" layoutY="7.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="18.0" scaleX="0.8" scaleY="0.8" stylesheets="@application.css">
+      <Button layoutX="451.0" layoutY="7.0" mnemonicParsing="false" onAction="#handleCloseAction" prefHeight="18.0" prefWidth="18.0" scaleX="0.8" scaleY="0.8" stylesheets="@application.css">
          <styleClass>
             <String fx:value="menuButton" />
             <String fx:value="closeButton" />
@@ -49,7 +49,7 @@
             <Insets top="2.0" />
          </padding>
       </Button>
-      <Button layoutX="429.0" layoutY="7.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="18.0" scaleX="0.8" scaleY="0.8" stylesheets="@application.css">
+      <Button layoutX="429.0" layoutY="7.0" mnemonicParsing="false" onAction="#handleMinimizeAction" prefHeight="18.0" prefWidth="18.0" scaleX="0.8" scaleY="0.8" stylesheets="@application.css">
          <styleClass>
             <String fx:value="menuButton" />
             <String fx:value="minimizeButton" />
