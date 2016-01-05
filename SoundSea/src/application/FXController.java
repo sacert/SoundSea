@@ -22,8 +22,12 @@ import org.jsoup.nodes.TextNode;
 
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
@@ -31,10 +35,14 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import org.json.*;
 
@@ -45,9 +53,11 @@ public class FXController implements Initializable {
 
 	@FXML private TextArea lyricBox;
 	@FXML private TextField getSearchField;
+	@FXML private Button getSearchButton;
 	@FXML private Button downloadButton;
 	@FXML private Text songLabelText;
 	@FXML private ImageView albumArt;
+	@FXML private Pane searchPopup;
 	
 	public static String songFullTitle = "";
 	public static String songTitle = "";
@@ -89,14 +99,20 @@ public class FXController implements Initializable {
 		albumArt.setImage(null);
 		
 		// set cover art album image in window
-		URL coverArtUrl = new URL(imageURLs.get(0));
-		BufferedImage img = ImageIO.read(coverArtUrl);
-		Image image = SwingFXUtils.toFXImage(img, null);
+		Image image;
+		int imageUrlCounter = 0;
+		do {
+			URL coverArtUrl = new URL(imageURLs.get(imageUrlCounter));
+			BufferedImage img = ImageIO.read(coverArtUrl);
+			image = SwingFXUtils.toFXImage(img, null);
+			imageUrlCounter++;
+		} while( image.getWidth()/image.getHeight() != 1);
 		albumArt.setImage(image);
 	}
 	
 	@FXML
 	private void handleSearchAction(ActionEvent event) throws IOException, InterruptedException  {
+		
 		SearchThread st = new SearchThread(getSearchField, songLabelText, albumArt);
 		st.start();
 	}
@@ -164,10 +180,11 @@ public class FXController implements Initializable {
 				"https://www.googleapis.com/customsearch/v1?key=AIzaSyCHoGF1u8RytvaNeCk69iyD9ouwFBmsndQ&cx=007547444199860528947:flga7fapbrm&q="
 						+ bandArtist.replace(" ", "%20")
 						+ albumTitle.replace(" ", "%20")
+						+ "%20"
+						+ albumYear.replace(" ", "%20")
 						+ "%20album%20cover%20art"
 						+ "&userip=&searchType=image&alt=json");
 		
-		System.out.println(url.toString());
 		if(albumTitle == songTitle) {
 			albumTitle = "";
 		}
@@ -296,8 +313,8 @@ public class FXController implements Initializable {
 
 		albumArt.setImage(image);
 		
+		
 	}
-	
 	
 	
 }

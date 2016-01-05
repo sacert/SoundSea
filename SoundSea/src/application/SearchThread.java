@@ -65,20 +65,25 @@ public class SearchThread extends Thread {
 		
 		albumArt.setImage(null);
 
+		
 		// set cover art album image in window
-		URL coverArtUrl = null;
-		try {
-			coverArtUrl = new URL(FXController.imageURLs.get(0));
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-		}
-		BufferedImage img = null;
-		try {
-			img = ImageIO.read(coverArtUrl);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		Image image = SwingFXUtils.toFXImage(img, null);
+		Image image;
+		int imageUrlCounter = 0;
+		do {
+			URL coverArtUrl = null;
+			try {
+				coverArtUrl = new URL(FXController.imageURLs.get(imageUrlCounter));
+			} catch (MalformedURLException e) {
+			}
+			BufferedImage img = null;
+			try {
+				img = ImageIO.read(coverArtUrl);
+			} catch (IOException e) {
+			}
+			image = SwingFXUtils.toFXImage(img, null);
+			imageUrlCounter++;
+		} while( image.getWidth()/image.getHeight() != 1);
 		albumArt.setImage(image);
+				
 	}
 }
