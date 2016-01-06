@@ -30,60 +30,43 @@ public class SearchThread extends Thread {
 		if(getSearchField.getText().isEmpty()) {
 			return;
 		}
-		
-		String query = getSearchField.getText();
-		List<String> googleURLResults = null;
-		
-		// get lyrics for song
 		try {
+			String query = getSearchField.getText();
+			List<String> googleURLResults = null;
+			
+			// get lyrics for song
 			googleURLResults = FXController.googleSearchQueryResults(FXController.azlyrics,query);
-		} catch (IOException e4) {
-			e4.printStackTrace();
-		}
-		List<String> lyricsURL = null;
-		try {
+			List<String> lyricsURL = null;
 			lyricsURL = FXController.getSongLyricsFromAZLyrics(googleURLResults.get(0));
-		} catch (IOException e3) {
-			e3.printStackTrace();
-		} // Parse from the FIRST result.
-		FXController.printLyricsToUI(lyricsURL);
-		
-		// get youtube link for song
-		try {
+				
+			// Parse from the FIRST result.
+			FXController.printLyricsToUI(lyricsURL);
+			
+			// get youtube link for song
 			googleURLResults = FXController.googleSearchQueryResults(FXController.youtube,query);
-		} catch (IOException e2) {
-			e2.printStackTrace();
-		}
-		FXController.YoutubeURL.add(googleURLResults.get(0));
-		FXController.YoutubeURL.set(0, FXController.YoutubeURL.get(0).replace("https://www.youtube.com/watch%3Fv%3D", "")); 
-		try {
-			FXController.googleImgURLResults = FXController.googleImageSearchQueryResults();
+			FXController.YoutubeURL.add(googleURLResults.get(0));
+			FXController.YoutubeURL.set(0, FXController.YoutubeURL.get(0).replace("https://www.youtube.com/watch%3Fv%3D", "")); 
+				FXController.googleImgURLResults = FXController.googleImageSearchQueryResults();
+			songLabelText.setText(FXController.songFullTitle);
+			
+			albumArt.setImage(null);
+	
+			
+			// set cover art album image in window
+			Image image;
+			int imageUrlCounter = 0;
+			do {
+				URL coverArtUrl = null;
+				coverArtUrl = new URL(FXController.imageURLs.get(imageUrlCounter));
+				BufferedImage img = null;
+				img = ImageIO.read(coverArtUrl);
+				image = SwingFXUtils.toFXImage(img, null);
+				imageUrlCounter++;
+			} while( image.getWidth()/image.getHeight() != 1);
+			albumArt.setImage(image);
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
-		songLabelText.setText(FXController.songFullTitle);
-		
-		albumArt.setImage(null);
-
-		
-		// set cover art album image in window
-		Image image;
-		int imageUrlCounter = 0;
-		do {
-			URL coverArtUrl = null;
-			try {
-				coverArtUrl = new URL(FXController.imageURLs.get(imageUrlCounter));
-			} catch (MalformedURLException e) {
-			}
-			BufferedImage img = null;
-			try {
-				img = ImageIO.read(coverArtUrl);
-			} catch (IOException e) {
-			}
-			image = SwingFXUtils.toFXImage(img, null);
-			imageUrlCounter++;
-		} while( image.getWidth()/image.getHeight() != 1);
-		albumArt.setImage(image);
 				
 	}
 }

@@ -21,8 +21,6 @@ public class DownloadThread extends Thread{
 		
 		File path = new File(tmpDir + "/SongDownloader");
 		
-		System.out.println(tmpDir);
-		
 		// if tmp directory exists, delete it
 		if(path.exists() && path.isDirectory()) {
 			try {
