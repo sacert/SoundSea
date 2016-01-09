@@ -194,7 +194,7 @@ public class FXController implements Initializable {
         conn.setRequestProperty("Accept", "application/json");
         BufferedReader br = new BufferedReader(new InputStreamReader(
                 (conn.getInputStream())));
-
+        
         String output;
         while ((output = br.readLine()) != null) {
             if(output.contains("\"link\":")) {
@@ -215,7 +215,7 @@ public class FXController implements Initializable {
 		
 		songFullTitle = title;
 		
-		String[] breakTitle = songFullTitle.split("-");
+		String[] breakTitle = songFullTitle.split(" - ");
 		bandArtist = breakTitle[0];
 		songTitle = breakTitle[1];
 		
