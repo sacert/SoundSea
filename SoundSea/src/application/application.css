@@ -104,3 +104,7 @@
 	-fx-opacity: 0.2;
 	-fx-border-radius: 10;
 }
+
+.loadingImage {
+	-fx-background-image: url("minimizeIconButton.png");
+}

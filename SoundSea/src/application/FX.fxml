@@ -58,5 +58,9 @@
             <Insets top="2.0" />
          </padding>
       </Button>
+      <ImageView fx:id="loadingImage" fitHeight="14.0" fitWidth="23.0" layoutX="373.0" layoutY="95.0" pickOnBounds="true" preserveRatio="true" styleClass="loadingImage">
+         <image>
+            <Image url="@loading.gif" />
+         </image></ImageView>
    </children>
 </Pane>

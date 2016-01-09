@@ -3,6 +3,7 @@ package application;
 
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -58,6 +59,7 @@ public class FXController implements Initializable {
 	@FXML private Text songLabelText;
 	@FXML private ImageView albumArt;
 	@FXML private Pane searchPopup;
+	@FXML private ImageView loadingImage;
 	
 	public static String songFullTitle = "";
 	public static String songTitle = "";
@@ -77,6 +79,7 @@ public class FXController implements Initializable {
 			return;
 		}
 
+		loadingImage.setVisible(true);
 		String query = getSearchField.getText();
 
 		List<String> googleURLResults = null;
@@ -96,8 +99,6 @@ public class FXController implements Initializable {
 		songLabelText.setText(songFullTitle);
 		downloadSong(YoutubeURL.get(0));
 		
-		albumArt.setImage(null);
-		
 		// set cover art album image in window
 		Image image;
 		int imageUrlCounter = 0;
@@ -107,13 +108,16 @@ public class FXController implements Initializable {
 			image = SwingFXUtils.toFXImage(img, null);
 			imageUrlCounter++;
 		} while( image.getWidth()/image.getHeight() != 1);
+		
+		albumArt.setImage(null);
+		loadingImage.setVisible(false);
 		albumArt.setImage(image);
 	}
 	
 	@FXML
 	private void handleSearchAction(ActionEvent event) throws IOException, InterruptedException  {
 		
-		SearchThread st = new SearchThread(getSearchField, songLabelText, albumArt);
+		SearchThread st = new SearchThread(getSearchField, songLabelText, albumArt, loadingImage);
 		st.start();
 	}
 	
@@ -300,6 +304,7 @@ public class FXController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		
+		loadingImage.setVisible(false);
 		getSearchField.setStyle("-fx-text-inner-color: #909090");
 		
 		Rectangle clip = new Rectangle(albumArt.getFitWidth(), albumArt.getFitHeight());
@@ -312,8 +317,6 @@ public class FXController implements Initializable {
 		WritableImage image = albumArt.snapshot(parameters, null);
 
 		albumArt.setImage(image);
-		
-		
 	}
 	
 	
