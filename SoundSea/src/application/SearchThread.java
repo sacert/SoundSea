@@ -20,12 +20,14 @@ public class SearchThread extends Thread {
 	Text songLabelText;
 	ImageView albumArt;
 	ImageView loadingImage;
+	boolean quickDownload;
 
-	SearchThread(TextField getSearchField, Text songLabelText, ImageView albumArt, ImageView loadingImage) {
+	SearchThread(TextField getSearchField, Text songLabelText, ImageView albumArt, ImageView loadingImage, boolean quickDownload) {
 		this.getSearchField = getSearchField;
 		this.songLabelText = songLabelText;
 		this.albumArt = albumArt;
 		this.loadingImage = loadingImage;
+		this.quickDownload = quickDownload;
 	}
 	
 	public void run() {
@@ -52,6 +54,10 @@ public class SearchThread extends Thread {
 				FXController.googleImgURLResults = FXController.googleImageSearchQueryResults();
 			songLabelText.setText(FXController.songFullTitle);	
 			
+			if(quickDownload) {
+				FXController.downloadSong(FXController.YoutubeURL.get(0));
+			}
+			
 			// set cover art album image in window
 			Image image;
 			int imageUrlCounter = 0;
@@ -62,13 +68,19 @@ public class SearchThread extends Thread {
 				img = ImageIO.read(coverArtUrl);
 				image = SwingFXUtils.toFXImage(img, null);
 				imageUrlCounter++;
-			} while( image.getWidth()/image.getHeight() != 1);
+			} while( image.getWidth()/image.getHeight() < 0.99 || image.getWidth()/image.getHeight() > 1.01);
+			
+			FXController.imageIndex = imageUrlCounter - 1;
+			
 			albumArt.setImage(null);
 			loadingImage.setVisible(false);
 			albumArt.setImage(image);
 		} catch (IOException e1) {
 			loadingImage.setVisible(false);
 			e1.printStackTrace();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 				
 	}

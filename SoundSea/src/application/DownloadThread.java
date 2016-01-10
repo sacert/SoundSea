@@ -42,7 +42,7 @@ public class DownloadThread extends Thread{
 			ffmp.waitFor();
 			Process ffca = null;
 			//ffmpeg32 -i in.mp3 -metadata title="The Title You Want" -metadata artist="Artist Name" -metadata album="Name of the Album" out.mp3
-			ffca = Runtime.getRuntime().exec(new String[] {"/usr/local/bin/ffmpeg", "-i", tmpDir + "/SongDownloader/temp.mp3", "-i" , FXController.googleImgURLResults.get(0), "-metadata", "title=" + FXController.songTitle, "-metadata", "artist=" + FXController.bandArtist, "-metadata", "album=" + FXController.albumTitle, "-metadata", "date=" + FXController.albumYear, "-map", "0:0" ,"-map", "1:0", "-c", "copy", "-id3v2_version", "3", "/Users/" + userName + "/Desktop/" + songTitle +".mp3",});
+			ffca = Runtime.getRuntime().exec(new String[] {"/usr/local/bin/ffmpeg", "-i", tmpDir + "/SongDownloader/temp.mp3", "-i" , FXController.googleImgURLResults.get(FXController.imageIndex), "-metadata", "title=" + FXController.songTitle, "-metadata", "artist=" + FXController.bandArtist, "-metadata", "album=" + FXController.albumTitle, "-metadata", "date=" + FXController.albumYear, "-map", "0:0" ,"-map", "1:0", "-c", "copy", "-id3v2_version", "3", "/Users/" + userName + "/Desktop/" + songTitle +".mp3",});
 			// wait for .mp4 file to be created
 			ffca.waitFor();
 			Runtime.getRuntime().exec(new String[] {"rm", "-rf", tmpDir + "/SongDownloader"});

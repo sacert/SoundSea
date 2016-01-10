@@ -39,10 +39,10 @@ public class Main extends Application {
 		try {
 	
 			Pane root = (Pane)FXMLLoader.load(getClass().getResource("FX.fxml"));
-			Scene scene = new Scene(root,484,198);
+			Scene scene = new Scene(root,463,198);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			
-			Rectangle rect = new Rectangle(484, 198);
+			Rectangle rect = new Rectangle(463, 198);
 			rect.setArcHeight(10);
 			rect.setArcWidth(10);
 			root.setClip(rect);

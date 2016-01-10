@@ -70,54 +70,20 @@ public class FXController implements Initializable {
 	public static List<String> googleImgURLResults = null;
 	public static List<String> YoutubeURL = new ArrayList<String>();
 	public static List<String> imageURLs = new ArrayList<String>();
+	
+	public static int imageIndex = 0;
 
 	@FXML
 	private void handleQuickDownloadAction(ActionEvent event) throws IOException, InterruptedException  {
 		
-		// To do: add pop-up prompting the user for input
-		if(getSearchField.getText().isEmpty()) {
-			return;
-		}
-
-		loadingImage.setVisible(true);
-		String query = getSearchField.getText();
-
-		List<String> googleURLResults = null;
-		
-		// get lyrics for song
-		googleURLResults = googleSearchQueryResults(azlyrics,query);
-		List<String> lyricsURL;
-		lyricsURL = getSongLyricsFromAZLyrics(googleURLResults.get(0)); // Parse from the FIRST result.
-		printLyricsToUI(lyricsURL);
-		
-		// get youtube link for song
-		googleURLResults = googleSearchQueryResults(youtube,query);
-		List<String> YoutubeURL = new ArrayList<String>(); // leave in a List so that in the future, we can look at which to download
-		YoutubeURL.add(googleURLResults.get(0));
-		YoutubeURL.set(0, YoutubeURL.get(0).replace("https://www.youtube.com/watch%3Fv%3D", "")); 
-		googleImgURLResults = googleImageSearchQueryResults();
-		songLabelText.setText(songFullTitle);
-		downloadSong(YoutubeURL.get(0));
-		
-		// set cover art album image in window
-		Image image;
-		int imageUrlCounter = 0;
-		do {
-			URL coverArtUrl = new URL(imageURLs.get(imageUrlCounter));
-			BufferedImage img = ImageIO.read(coverArtUrl);
-			image = SwingFXUtils.toFXImage(img, null);
-			imageUrlCounter++;
-		} while( image.getWidth()/image.getHeight() != 1);
-		
-		albumArt.setImage(null);
-		loadingImage.setVisible(false);
-		albumArt.setImage(image);
+		SearchThread st = new SearchThread(getSearchField, songLabelText, albumArt, loadingImage, true);
+		st.start();
 	}
 	
 	@FXML
 	private void handleSearchAction(ActionEvent event) throws IOException, InterruptedException  {
 		
-		SearchThread st = new SearchThread(getSearchField, songLabelText, albumArt, loadingImage);
+		SearchThread st = new SearchThread(getSearchField, songLabelText, albumArt, loadingImage, false);
 		st.start();
 	}
 	
@@ -134,6 +100,7 @@ public class FXController implements Initializable {
 		
 		DownloadThread dt = new DownloadThread(songFullTitle, youtubeReference);
 		dt.start();
+		YoutubeURL.clear();
 	}
 
 	static List<String> googleSearchQueryResults (String websiteToGetLyricsFrom, String lyricsQuery) throws IOException{
