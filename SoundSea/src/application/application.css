@@ -46,14 +46,14 @@
 }
 
 .downloadButton {
-	-fx-background-image: url("downloadButton.jpg");
+	-fx-background-image: url("../../resources/downloadButton.jpg");
 	-fx-background-position: left top, center;
 	-fx-background-repeat: no-repeat;
 	-fx-background-size: cover, auto;
 }
 
 .downloadButton:hover {
-	-fx-background-image: url("hoverDownloadButton.jpg");
+	-fx-background-image: url("../../resources/hoverDownloadButton.jpg");
 	-fx-background-position: left top, center;
 	-fx-background-repeat: no-repeat;
 	-fx-background-size: cover, auto;
@@ -74,14 +74,14 @@
 }
 
 .closeButton {
-	-fx-background-image: url("closeIconButton.png");
+	-fx-background-image: url("../../resources/closeIconButton.png");
 	-fx-background-position: left top, center;
 	-fx-background-repeat: no-repeat;
 	-fx-background-size: cover, auto;
 }
 
 .minimizeButton {
-	-fx-background-image: url("minimizeIconButton.png");
+	-fx-background-image: url("../../resources/minimizeIconButton.png");
 	-fx-background-position: left top, center;
 	-fx-background-repeat: no-repeat;
 	-fx-background-size: cover, auto;
@@ -106,5 +106,5 @@
 }
 
 .loadingImage {
-	-fx-background-image: url("minimizeIconButton.png");
+	-fx-background-image: url("../../resources/minimizeIconButton.png");
 }

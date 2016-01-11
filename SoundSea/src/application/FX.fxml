@@ -60,7 +60,7 @@
       </Button>
       <ImageView fx:id="loadingImage" fitHeight="14.0" fitWidth="23.0" layoutX="364.0" layoutY="95.0" pickOnBounds="true" preserveRatio="true" styleClass="loadingImage">
          <image>
-            <Image url="@loading.gif" />
+            <Image url="@../../resources/loading.gif" />
          </image></ImageView>
    </children>
 </Pane>
