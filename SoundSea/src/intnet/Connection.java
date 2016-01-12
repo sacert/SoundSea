@@ -1,14 +1,20 @@
 package intnet;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Reader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.crypto.Data;
+
+import org.apache.commons.io.FileUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
@@ -16,6 +22,12 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
 import org.jsoup.nodes.TextNode;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import application.FXController;
 
@@ -128,6 +140,38 @@ public class Connection {
 		lyrics.remove(0);
 
 		return lyrics;
+	}
+	
+	public static void getSongFromPleer() throws IOException {
+
+		String fullURLPath = "http://www.pleer.com/browser-extension/search?q=%" + FXController.bandArtist.replace(" ", "+") + "+" +FXController.songTitle.replace(" ", "+");
+		
+		URL url = new URL(fullURLPath);
+		HttpURLConnection request = (HttpURLConnection) url.openConnection();
+		request.connect();
+		
+		JsonParser jp = new JsonParser();
+		JsonElement root = jp.parse(new InputStreamReader((InputStream) request.getContent()));
+		JsonObject rootobj = root.getAsJsonObject();
+		JsonArray arr = rootobj.getAsJsonArray("tracks");
+		rootobj = arr.get(0).getAsJsonObject();
+		
+		List<String> fileList = new ArrayList<String>();
+		List<String> fullTitleList = new ArrayList<String>();
+		
+		for(int i = 0; i < arr.size(); i++) {
+			rootobj = arr.get(i).getAsJsonObject();
+			fileList.add(rootobj.get("file").toString().replace("\"", ""));
+		}
+		
+		FXController.fileList = fileList;
+		
+		for(int i = 0; i < arr.size(); i++) {
+			rootobj = arr.get(i).getAsJsonObject();
+			fullTitleList.add(rootobj.get("artist").toString().replace("\"", "") + " - " + rootobj.get("track").toString().replace("\"", ""));
+		}
+		
+		FXController.fullTitleList = fullTitleList;
 	}
 
 	private static String fetchIpFromAmazon() throws IOException {

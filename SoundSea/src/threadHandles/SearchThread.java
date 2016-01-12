@@ -52,29 +52,17 @@ public class SearchThread extends Thread {
 			// get lyrics for song
 			googleURLResults = Connection.googleSearchQueryResults(FXController.azlyrics,songInfoQuery);
 			Connection.getSongLyricsFromAZLyrics(googleURLResults.get(0));
-			String youtubeQuery = FXController.songFullTitle;
 			
-			// add flags the user can input to add special cases for the search
-			if(songInfoQuery.contains("|")) {
-				String afterDiv = songInfoQuery.substring(songInfoQuery.indexOf("|"));
-				if(afterDiv.contains("a"))
-					youtubeQuery = youtubeQuery + " audio";
-				if(afterDiv.contains("l"))
-					youtubeQuery = youtubeQuery + " lyrics";
-				if(afterDiv.contains("hq"))
-					youtubeQuery = youtubeQuery + " hq";
-			}
+			// get download link for song
+			Connection.getSongFromPleer();
 			
-			// get youtube link for song
-			googleURLResults = Connection.googleSearchQueryResults(FXController.youtube,youtubeQuery);
-			FXController.YoutubeURL.add(googleURLResults.get(0));
-			FXController.YoutubeURL.set(0, FXController.YoutubeURL.get(0).replace("https://www.youtube.com/watch%3Fv%3D", "")); 
+			// get cover art 
 			FXController.googleImgURLResults = Connection.googleImageSearchQueryResults();
-			songLabelText.setText(FXController.songFullTitle);	
+			
+			songLabelText.setText(FXController.fullTitleList.get(0));	
 			
 			if(quickDownload) {
-				System.out.println(FXController.YoutubeURL.get(0));
-				FXController.downloadSong(FXController.YoutubeURL.get(0));
+				FXController.downloadSong();
 			}
 			
 			// set cover art album image in window

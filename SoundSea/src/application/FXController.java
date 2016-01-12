@@ -1,20 +1,10 @@
 package application;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
-
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.nodes.Node;
-import org.jsoup.nodes.TextNode;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -30,8 +20,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-
-import org.json.*;
 
 public class FXController implements Initializable {
 
@@ -54,8 +42,9 @@ public class FXController implements Initializable {
 	public static String albumYear = "";
 	
 	public static List<String> googleImgURLResults = null;
-	public static List<String> YoutubeURL = new ArrayList<String>();
 	public static List<String> imageURLs = new ArrayList<String>();
+	public static List<String> fileList = new ArrayList<String>();
+	public static List<String> fullTitleList = new ArrayList<String>();
 	
 	public static int imageIndex = 0;
 	public static WritableImage greyImage;
@@ -80,14 +69,13 @@ public class FXController implements Initializable {
 		if(songLabelText.getText().isEmpty()) {
 			return;
 		}
-		downloadSong(YoutubeURL.get(0));
+		downloadSong();
 	}
 	
-	public static void downloadSong(String youtubeReference) throws IOException, InterruptedException {
+	public static void downloadSong() throws IOException, InterruptedException {
 		
-		threadHandles.DownloadThread dt = new threadHandles.DownloadThread(songFullTitle, youtubeReference);
+		threadHandles.DownloadThread dt = new threadHandles.DownloadThread(fullTitleList.get(0));
 		dt.start();
-		YoutubeURL.clear();
 	}
 
 	
@@ -110,6 +98,7 @@ public class FXController implements Initializable {
 		getSearchField.setStyle("-fx-text-inner-color: #909090");
 		
 		setCoverArtGreyBlock();
+	
 		
 	}
 	

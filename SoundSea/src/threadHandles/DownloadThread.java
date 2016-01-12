@@ -2,17 +2,19 @@ package threadHandles;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
+
+import org.apache.commons.io.FileUtils;
 
 import application.FXController;
 
 public class DownloadThread extends Thread{
 	
-	private String songTitle, youtubeReference;
+	private String songTitle;
 
-	public DownloadThread(String songTitle, String youtubeReference)
+	public DownloadThread(String songTitle)
 	{
 		this.songTitle = songTitle;
-		this.youtubeReference = youtubeReference;
 	}
 
 	@Override
@@ -34,18 +36,16 @@ public class DownloadThread extends Thread{
 		}
 		
 		try {
-			Process ytd = null;
-			ytd = Runtime.getRuntime().exec(new String[] { "/usr/local/bin/youtube-dl", "--audio-quality", "0", "--output", tmpDir + "/SongSea/temp.mp4", "https://www.youtube.com/watch?v=" + youtubeReference});
-			// wait for .mp4 file to be created
-			ytd.waitFor();
-			// begin ffmpeg conversion to .mp3
-			Process ffmp = null;
-			ffmp = Runtime.getRuntime().exec(new String[] {"/usr/local/bin/ffmpeg", "-i", tmpDir + "/SongSea/temp.mp4", "-vn", "-acodec", "libmp3lame", "-ac", "2", "-qscale:a", "4", "-ar", "48000", tmpDir + "/SongSea/temp.mp3"});
-			// wait for .mp4 file to be created
-			ffmp.waitFor();
+			
+			File file = new File(tmpDir + "/SongSea/temp.mp3");
+			
+			// download file
+			URL url = new URL(FXController.fileList.get(0));
+			FileUtils.copyURLToFile(url, file);
+			
 			Process ffca = null;
-			//ffmpeg32 -i in.mp3 -metadata title="The Title You Want" -metadata artist="Artist Name" -metadata album="Name of the Album" out.mp3
-			ffca = Runtime.getRuntime().exec(new String[] {"/usr/local/bin/ffmpeg", "-i", tmpDir + "/SongSea/temp.mp3", "-i" , FXController.googleImgURLResults.get(FXController.imageIndex), "-metadata", "title=" + FXController.songTitle, "-metadata", "artist=" + FXController.bandArtist, "-metadata", "album=" + FXController.albumTitle, "-metadata", "date=" + FXController.albumYear, "-map", "0:0" ,"-map", "1:0", "-c", "copy", "-id3v2_version", "3", "/Users/" + userName + "/Desktop/" + songTitle +".mp3",});
+			//"title=" + FXController.songTitle, "-metadata", "artist=" + FXController.bandArtist, "-metadata", "album=" + FXController.albumTitle, "-metadata", "date=" + FXController.albumYear,
+			ffca = Runtime.getRuntime().exec(new String[] {"/usr/local/bin/ffmpeg", "-i", tmpDir + "/SongSea/temp.mp3", "-i" , FXController.googleImgURLResults.get(FXController.imageIndex), "-map", "0:0" ,"-map", "1:0", "-c", "copy", "-id3v2_version", "3", "/Users/" + userName + "/Desktop/" + songTitle +".mp3",});
 			// wait for .mp4 file to be created
 			ffca.waitFor();
 			Runtime.getRuntime().exec(new String[] {"rm", "-rf", tmpDir + "/SongSea"});
