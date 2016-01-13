@@ -44,6 +44,8 @@ public class DownloadThread extends Thread{
 			FileUtils.copyURLToFile(url, file);
 			
 			Process ffca = null;
+			
+			// debating whether to use metadata from itunes or use the existing metadata from pleer
 			//"title=" + FXController.songTitle, "-metadata", "artist=" + FXController.bandArtist, "-metadata", "album=" + FXController.albumTitle, "-metadata", "date=" + FXController.albumYear,
 			ffca = Runtime.getRuntime().exec(new String[] {"/usr/local/bin/ffmpeg", "-i", tmpDir + "/SongSea/temp.mp3", "-i" , FXController.coverArtUrl, "-map", "0:0" ,"-map", "1:0", "-c", "copy", "-id3v2_version", "3", "/Users/" + userName + "/Desktop/" + songTitle +".mp3",});
 			// wait for .mp4 file to be created
