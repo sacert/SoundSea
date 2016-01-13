@@ -1,6 +1,8 @@
 package threadHandles;
 
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
 
@@ -37,12 +39,33 @@ public class DownloadThread extends Thread{
 		
 		try {
 			
-			File file = new File(tmpDir + "/SongSea/temp.mp3");
+			long time = System.currentTimeMillis();
 			
+			File file = new File(tmpDir + "/SongSea/");
+			file.mkdirs();
+			
+			long time1 = System.currentTimeMillis();
 			// download file
 			URL url = new URL(FXController.fileList.get(0));
-			FileUtils.copyURLToFile(url, file);
+			int size = url.openConnection().getContentLength();
+			//FileUtils.copyURLToFile(url, file);
 			
+			BufferedInputStream in = new BufferedInputStream(url.openStream());
+			FileOutputStream fout = new FileOutputStream(tmpDir + "/SongSea/temp.mp3");
+			byte data[] = new byte[1024];
+			int count;
+			double sumCount = 0.0;
+			time1 = System.currentTimeMillis() - time1;
+	        while ((count = in.read(data, 0, 1024)) != -1) {
+	            fout.write(data, 0, count);
+
+	            sumCount += count;
+	            if (size > 0) {
+	                System.out.println("Percentace: " + (sumCount / size * 100.0) + "%");
+	            }
+	        }
+			
+			long time2 = System.currentTimeMillis();
 			Process ffca = null;
 			
 			// debating whether to use metadata from itunes or use the existing metadata from pleer
@@ -51,6 +74,10 @@ public class DownloadThread extends Thread{
 			// wait for .mp4 file to be created
 			ffca.waitFor();
 			Runtime.getRuntime().exec(new String[] {"rm", "-rf", tmpDir + "/SongSea"});
+			time2 = System.currentTimeMillis() - time2;
+			System.out.println(time1);
+			System.out.println(time2);
+			System.out.println(System.currentTimeMillis() - time);
 		} catch (IOException | InterruptedException e) {
 			e.printStackTrace();
 		}

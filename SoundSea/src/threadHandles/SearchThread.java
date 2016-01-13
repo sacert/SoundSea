@@ -55,13 +55,16 @@ public class SearchThread extends Thread {
 				FXController.downloadSong();
 			}
 			
+			// if the cover art hasn't been displayed yet, spin until it has
+			while(image == null) {
+				//spin
+			}
+			
 			albumArt.setImage(null);
 			loadingImage.setVisible(false);
 			albumArt.setImage(image);
-		} catch (IOException e1) {
+		} catch (IOException | InterruptedException e) {
 			loadingImage.setVisible(false);
-			e1.printStackTrace();
-		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 				

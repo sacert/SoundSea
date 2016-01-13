@@ -152,12 +152,11 @@ public class Connection {
 	}
 	
 	public static void getSongFromPleer() throws IOException {
-		
-		if(FXController.bandArtist.contains("(")) 
-			FXController.bandArtist = FXController.bandArtist.substring(0, FXController.bandArtist.indexOf("(") - 1);
-		if(FXController.songTitle.contains("(")) 
-			FXController.songTitle = FXController.songTitle.substring(0, FXController.songTitle.indexOf("(") - 1);
-		
+				
+		FXController.bandArtist = FXController.bandArtist.replaceAll("\\bfeat\\b", "");
+		FXController.songTitle = FXController.songTitle.replaceAll("\\bfeat\\b", "");
+		FXController.bandArtist = FXController.bandArtist.replaceAll("[!@#$%^&*(){}:\"<>?]", "");
+		FXController.songTitle = FXController.songTitle.replaceAll("[!@#$%^&*(){}:\"<>?]", "");
 
 		String fullURLPath = "http://www.pleer.com/browser-extension/search?q=" + FXController.bandArtist.replace(" ", "+") + "+" +FXController.songTitle.replace(" ", "+");
 		
