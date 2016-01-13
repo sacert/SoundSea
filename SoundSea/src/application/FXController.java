@@ -23,9 +23,6 @@ import javafx.stage.Stage;
 
 public class FXController implements Initializable {
 
-	public final static String azlyrics = "azlyrics.com";
-	public final static String youtube = "www.youtube.com";
-
 	@FXML private TextArea lyricBox;
 	@FXML private TextField getSearchField;
 	@FXML private Button getSearchButton;
@@ -40,6 +37,7 @@ public class FXController implements Initializable {
 	public static String albumTitle = "";
 	public static String bandArtist = "";
 	public static String albumYear = "";
+	public static String coverArtUrl = "";
 	
 	public static List<String> googleImgURLResults = null;
 	public static List<String> imageURLs = new ArrayList<String>();
