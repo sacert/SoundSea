@@ -157,6 +157,8 @@ public class Connection {
 		FXController.songTitle = FXController.songTitle.replaceAll("\\bfeat\\b", "");
 		FXController.bandArtist = FXController.bandArtist.replaceAll("[!@#$%^&*(){}:\"<>?]", "");
 		FXController.songTitle = FXController.songTitle.replaceAll("[!@#$%^&*(){}:\"<>?]", "");
+		FXController.bandArtist = FXController.bandArtist.replaceAll("é", "e");
+		FXController.songTitle = FXController.songTitle.replaceAll("é", "e");
 
 		String fullURLPath = "http://www.pleer.com/browser-extension/search?q=" + FXController.bandArtist.replace(" ", "+") + "+" +FXController.songTitle.replace(" ", "+");
 		
@@ -236,6 +238,18 @@ public class Connection {
 		// parse song title
 		rootobj = arr.get(itunesIndex).getAsJsonObject();
 		FXController.songTitle = (rootobj.get("trackName").toString().replace("\"", ""));
+		
+		// parse album title
+		rootobj = arr.get(itunesIndex).getAsJsonObject();
+		FXController.albumTitle = (rootobj.get("collectionName").toString().replace("\"", ""));
+		
+		// parse year
+		rootobj = arr.get(itunesIndex).getAsJsonObject();
+		FXController.albumYear = (rootobj.get("releaseDate").toString().replace("\"", "").substring(0, 4));
+		
+		// parse genre
+		rootobj = arr.get(itunesIndex).getAsJsonObject();
+		FXController.genre = (rootobj.get("primaryGenreName").toString().replace("\"", ""));
 		
 		// parse cover art
 		rootobj = arr.get(itunesIndex).getAsJsonObject();

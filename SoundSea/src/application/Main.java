@@ -2,6 +2,8 @@ package application;
 	
 import java.io.IOException;
 
+import com.mpatric.mp3agic.Mp3File;
+
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.stage.Stage;
@@ -57,7 +59,7 @@ public class Main extends Application {
 		}
 	}
 	public static void main(String[] args) throws IOException, InterruptedException {
-
+		
 		launch(args);
 		
 	}

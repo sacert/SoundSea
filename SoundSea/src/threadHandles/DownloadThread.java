@@ -8,15 +8,25 @@ import java.net.URL;
 
 import org.apache.commons.io.FileUtils;
 
+import com.mpatric.mp3agic.ID3v2;
+import com.mpatric.mp3agic.ID3v24Tag;
+import com.mpatric.mp3agic.InvalidDataException;
+import com.mpatric.mp3agic.Mp3File;
+import com.mpatric.mp3agic.NotSupportedException;
+import com.mpatric.mp3agic.UnsupportedTagException;
+
 import application.FXController;
+import javafx.scene.control.ProgressBar;
 
 public class DownloadThread extends Thread{
 	
 	private String songTitle;
+	private ProgressBar progressBar;
 
-	public DownloadThread(String songTitle)
+	public DownloadThread(String songTitle, ProgressBar progressBar)
 	{
 		this.songTitle = songTitle;
+		this.progressBar = progressBar;
 	}
 
 	@Override
@@ -39,7 +49,7 @@ public class DownloadThread extends Thread{
 		
 		try {
 			
-			long time = System.currentTimeMillis();
+			progressBar.setVisible(true);
 			
 			File file = new File(tmpDir + "/SongSea/");
 			file.mkdirs();
@@ -61,24 +71,32 @@ public class DownloadThread extends Thread{
 
 	            sumCount += count;
 	            if (size > 0) {
-	                System.out.println("Percentace: " + (sumCount / size * 100.0) + "%");
+	            	progressBar.setProgress(sumCount / size);
 	            }
 	        }
+						
+			Mp3File mp3file = new Mp3File(tmpDir + "/SongSea/temp.mp3");
+			mp3file.removeId3v1Tag();
+			mp3file.removeId3v2Tag();
 			
-			long time2 = System.currentTimeMillis();
-			Process ffca = null;
+			// insert metadata
+			ID3v2 id3v2Tag = new ID3v24Tag();
+			mp3file.setId3v2Tag(id3v2Tag);
+			id3v2Tag.setArtist(FXController.bandArtist);
+			id3v2Tag.setTitle(FXController.songTitle);
+			if(FXController.albumTitle != "") 
+				id3v2Tag.setAlbum(FXController.albumTitle);
+			id3v2Tag.setYear(FXController.albumYear);
+			id3v2Tag.setGenreDescription(FXController.genre);
+			id3v2Tag.setAlbumImage(CoverArtThread.imageByte, "image/jpeg");
 			
-			// debating whether to use metadata from itunes or use the existing metadata from pleer
-			//"title=" + FXController.songTitle, "-metadata", "artist=" + FXController.bandArtist, "-metadata", "album=" + FXController.albumTitle, "-metadata", "date=" + FXController.albumYear,
-			ffca = Runtime.getRuntime().exec(new String[] {"/usr/local/bin/ffmpeg", "-i", tmpDir + "/SongSea/temp.mp3", "-i" , FXController.coverArtUrl, "-map", "0:0" ,"-map", "1:0", "-c", "copy", "-id3v2_version", "3", "/Users/" + userName + "/Desktop/" + songTitle +".mp3",});
-			// wait for .mp4 file to be created
-			ffca.waitFor();
+			mp3file.save("/Users/" + userName + "/Desktop/" + songTitle +".mp3");
+
 			Runtime.getRuntime().exec(new String[] {"rm", "-rf", tmpDir + "/SongSea"});
-			time2 = System.currentTimeMillis() - time2;
-			System.out.println(time1);
-			System.out.println(time2);
-			System.out.println(System.currentTimeMillis() - time);
-		} catch (IOException | InterruptedException e) {
+			
+			progressBar.setVisible(false);
+			progressBar.setProgress(0);
+		} catch (IOException | UnsupportedTagException | InvalidDataException | NotSupportedException e) {
 			e.printStackTrace();
 		}
 	}

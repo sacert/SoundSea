@@ -62,5 +62,6 @@
          <image>
             <Image url="@../../resources/loading.gif" />
          </image></ImageView>
+      <ProgressBar fx:id="progressBar" layoutX="20.0" layoutY="184.0" prefHeight="6.0" prefWidth="423.0" progress="0.0" styleClass="progressBar" stylesheets="@application.css" />
    </children>
 </Pane>
