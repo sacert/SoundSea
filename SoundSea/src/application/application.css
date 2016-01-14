@@ -110,6 +110,7 @@
 }
 
 .progress-bar > .bar {
+	-fx-background-color: -fx-box-border, linear-gradient(to bottom, derive(-fx-accent, 95%), derive(-fx-accent,10%)), d8d8d8;
     -fx-background-insets: 1 1 2 1;
     -fx-padding: 0.20em;
 }
