@@ -63,5 +63,13 @@
             <Image url="@../../resources/loading.gif" />
          </image></ImageView>
       <ProgressBar fx:id="progressBar" layoutX="20.0" layoutY="184.0" prefHeight="6.0" prefWidth="423.0" progress="0.0" styleClass="progressBar" stylesheets="@application.css" />
+      <Button fx:id="songSeaLogo" layoutX="-2.0" layoutY="-3.0" mnemonicParsing="false" onAction="#handleSettings" prefHeight="41.0" prefWidth="130.0" text="SongSea" textFill="#787878">
+         <font>
+            <Font size="21.0" />
+         </font>
+         <styleClass>
+            <String fx:value="title" />
+            <String fx:value="titleClick" />
+         </styleClass></Button>
    </children>
 </Pane>

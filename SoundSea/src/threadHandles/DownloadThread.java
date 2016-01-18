@@ -90,7 +90,7 @@ public class DownloadThread extends Thread{
 			id3v2Tag.setGenreDescription(FXController.genre);
 			id3v2Tag.setAlbumImage(CoverArtThread.imageByte, "image/jpeg");
 			
-			mp3file.save("/Users/" + userName + "/Desktop/" + songTitle +".mp3");
+			mp3file.save(FXController.folderDirectory + songTitle +".mp3");
 
 			Runtime.getRuntime().exec(new String[] {"rm", "-rf", tmpDir + "/SongSea"});
 			

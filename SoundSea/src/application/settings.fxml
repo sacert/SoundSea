@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<Pane prefHeight="78.0" prefWidth="444.0" styleClass="rootPane" stylesheets="@application.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.SettingController">
+   <children>
+      <Button fx:id="fileAccept" layoutX="357.0" layoutY="37.0" mnemonicParsing="false" onAction="#handleAccept" prefHeight="27.0" prefWidth="69.0" text="Accept" textFill="#787878">
+         <styleClass>
+            <String fx:value="buttons" />
+            <String fx:value="buttonClick" />
+         </styleClass></Button>
+      <Pane layoutX="17.0" layoutY="37.0" prefHeight="27.0" prefWidth="257.0" styleClass="buttons">
+         <children>
+            <Text fx:id="directoryText" fill="#787878" layoutX="7.0" layoutY="19.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="buttons" wrappingWidth="244.0" />
+            <Button fx:id="fileChooser" layoutX="267.0" layoutY="1.0" mnemonicParsing="false" onAction="#handleDirectory" prefHeight="27.0" prefWidth="69.0" text="Browse" textFill="#787878">
+               <styleClass>
+                  <String fx:value="buttons" />
+                  <String fx:value="buttonClick" />
+               </styleClass>
+            </Button>
+         </children></Pane>
+      <Button layoutX="416.0" layoutY="7.0" mnemonicParsing="false" onAction="#handleClose" prefHeight="18.0" prefWidth="18.0" scaleX="0.8" scaleY="0.8">
+         <styleClass>
+            <String fx:value="menuButton" />
+            <String fx:value="closeButton" />
+         </styleClass>
+         <padding>
+            <Insets top="2.0" />
+         </padding>
+      </Button>
+      <Text fill="#787878" layoutX="19.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Settings">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Text>
+   </children>
+</Pane>

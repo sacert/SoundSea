@@ -41,6 +41,21 @@
 	-fx-padding: 1 3 1 3;
 }
 
+.title {
+	-fx-text-box-border: transparent;
+	-fx-background-color: transparent;
+	-fx-text-fill: #908a8a;
+}
+
+.titleClick {
+	
+}
+.titleClick:hover {
+	-fx-text-box-border: transparent;
+	-fx-background-color: transparent;
+	-fx-text-fill: #787878;
+}
+
 .coverArtViewer {
 	-fx-border-radius: 10;
 }
