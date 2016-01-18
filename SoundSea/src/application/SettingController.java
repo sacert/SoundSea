@@ -35,7 +35,8 @@ public class SettingController implements Initializable{
 	
 	@FXML
 	private void handleAccept(ActionEvent event) {
-		UserPreferences.setDirectory(selectedDirectory.getAbsolutePath());
+		if(selectedDirectory != null) 
+			UserPreferences.setDirectory(selectedDirectory.getAbsolutePath());
 		Stage stage = (Stage) fileChooser.getScene().getWindow();
 		stage.close();
 	}
