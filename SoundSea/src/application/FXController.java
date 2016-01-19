@@ -95,23 +95,6 @@ public class FXController implements Initializable {
 		downloadSong(progressBar);
 	}
 	
-	@FXML
-	private void searchHandle(ActionEvent event) throws IOException, InterruptedException  {
-		
-		getSearchField.setOnKeyPressed(new EventHandler<KeyEvent>()
-	    {
-	        @Override
-	        public void handle(KeyEvent ke)
-	        {
-	            if (ke.getCode().equals(KeyCode.ENTER))
-	            {
-	            	threadHandles.SearchThread st = new threadHandles.SearchThread(getSearchField, songLabelText, albumArt, loadingImage, false, progressBar);
-	        		st.start();
-	            }
-	        }
-	    });
-	}
-	
 	public static void downloadSong(ProgressBar progressBar) throws IOException, InterruptedException {
 		
 		threadHandles.DownloadThread dt = new threadHandles.DownloadThread(fullTitleList.get(0), progressBar);
@@ -173,6 +156,19 @@ public class FXController implements Initializable {
 		setCoverArtGreyBlock();
 		
 		songLabelText.setEditable(false);
+		
+		getSearchField.setOnKeyPressed(new EventHandler<KeyEvent>()
+	    {
+	        @Override
+	        public void handle(KeyEvent ke)
+	        {
+	            if (ke.getCode().equals(KeyCode.ENTER))
+	            {
+	            	threadHandles.SearchThread st = new threadHandles.SearchThread(getSearchField, songLabelText, albumArt, loadingImage, false, progressBar);
+	        		st.start();
+	            }
+	        }
+	    });
 		
 	}
 	

@@ -12,7 +12,7 @@
 
 <Pane prefHeight="198.0" prefWidth="463.0" styleClass="rootPane" stylesheets="@application.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.FXController">
    <children>
-      <TextField fx:id="getSearchField" layoutX="18.0" layoutY="34.0" onAction="#searchHandle" prefHeight="55.0" prefWidth="268.0" promptText="Search" styleClass="searchBar" stylesheets="@application.css">
+      <TextField fx:id="getSearchField" layoutX="18.0" layoutY="34.0" prefHeight="55.0" prefWidth="268.0" promptText="Search" styleClass="searchBar" stylesheets="@application.css">
          <font>
             <Font size="33.0" />
          </font>
