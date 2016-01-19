@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.paint.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
@@ -11,7 +12,7 @@
 
 <Pane prefHeight="198.0" prefWidth="463.0" styleClass="rootPane" stylesheets="@application.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.FXController">
    <children>
-      <TextField fx:id="getSearchField" layoutX="18.0" layoutY="34.0" prefHeight="55.0" prefWidth="268.0" promptText="Search" styleClass="searchBar" stylesheets="@application.css">
+      <TextField fx:id="getSearchField" layoutX="18.0" layoutY="34.0" onAction="#searchHandle" prefHeight="55.0" prefWidth="268.0" promptText="Search" styleClass="searchBar" stylesheets="@application.css">
          <font>
             <Font size="33.0" />
          </font>
@@ -35,9 +36,10 @@
             <String fx:value="buttons" />
          </styleClass>
       </Button>
-      <Pane layoutX="18.0" layoutY="155.0" prefHeight="22.0" prefWidth="234.0" styleClass="buttons" stylesheets="@application.css">
+      <Pane fx:id="songLabelPane" layoutX="18.0" layoutY="155.0" prefHeight="22.0" prefWidth="234.0" styleClass="buttons" stylesheets="@application.css">
          <children>
-            <Text fx:id="songLabelText" fill="#787878" layoutX="7.0" layoutY="17.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="218.68292617797852" />
+            <Text fill="#787878" layoutX="7.0" layoutY="17.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="218.68292617797852" />
+            <TextArea fx:id="songLabelText" layoutX="7.0" layoutY="-2.0" prefHeight="62.0" prefWidth="219.0" styleClass="scrollText" />
          </children>
       </Pane>
       <Button layoutX="437.0" layoutY="7.0" mnemonicParsing="false" onAction="#handleCloseAction" prefHeight="18.0" prefWidth="18.0" scaleX="0.8" scaleY="0.8" stylesheets="@application.css">
@@ -63,7 +65,7 @@
             <Image url="@../../resources/loading.gif" />
          </image></ImageView>
       <ProgressBar fx:id="progressBar" layoutX="20.0" layoutY="184.0" prefHeight="6.0" prefWidth="423.0" progress="0.0" styleClass="progressBar" stylesheets="@application.css" />
-      <Button fx:id="songSeaLogo" layoutX="-2.0" layoutY="-3.0" mnemonicParsing="false" onAction="#handleSettings" prefHeight="41.0" prefWidth="130.0" text="SongSea" textFill="#787878">
+      <Button fx:id="songSeaLogo" layoutX="6.0" layoutY="4.0" mnemonicParsing="false" onAction="#handleSettings" prefHeight="23.0" prefWidth="30.0" scaleX="0.6" scaleY="0.6" textFill="#787878">
          <font>
             <Font size="21.0" />
          </font>
@@ -71,5 +73,18 @@
             <String fx:value="title" />
             <String fx:value="titleClick" />
          </styleClass></Button>
+      <Label layoutX="198.0" layoutY="5.0" text="SongSea">
+         <font>
+            <Font name="System Bold" size="15.0" />
+         </font>
+         <textFill>
+            <RadialGradient centerX="0.5224719101123596" centerY="0.5192307692307693" focusDistance="0.2142857142857144" radius="0.5">
+               <stops>
+                  <Stop color="#0083ff69" />
+                  <Stop color="#a49fc29e" offset="1.0" />
+               </stops>
+            </RadialGradient>
+         </textFill>
+      </Label>
    </children>
 </Pane>

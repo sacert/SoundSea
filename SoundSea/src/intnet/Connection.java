@@ -182,12 +182,12 @@ public class Connection {
 		List<String> fullTitleList = new ArrayList<String>();
 		
 		FXController.fileList = fileList;
-		Pattern p = Pattern.compile("^[\\x20-\\x7F]*$");
+		Pattern p = Pattern.compile("^[\\x20-\\x7d]*$");
 		
 		for(int i = 0; i < arr.size(); i++) {
 			rootobj = arr.get(i).getAsJsonObject();
-			Matcher m1 = p.matcher(rootobj.get("artist").toString().replace("\"", ""));
-			Matcher m2 = p.matcher(rootobj.get("track").toString().replace("\"", ""));
+			Matcher m1 = p.matcher(rootobj.get("artist").toString().replace("\"", "").replace("[", "~").replace("]", "~"));
+			Matcher m2 = p.matcher(rootobj.get("track").toString().replace("\"", "").replace("[", "~").replace("]", "~"));
 			if(m1.find() && m2.find()) {
 				fileList.add(rootobj.get("file").toString().replace("\"", ""));
 				fullTitleList.add(rootobj.get("artist").toString().replace("\"", "") + " - " + rootobj.get("track").toString().replace("\"", ""));

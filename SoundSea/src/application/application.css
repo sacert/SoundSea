@@ -44,16 +44,20 @@
 .title {
 	-fx-text-box-border: transparent;
 	-fx-background-color: transparent;
-	-fx-text-fill: #908a8a;
+	-fx-background-insets: 0;
+	-fx-background-radius: 5;
+	-fx-padding: 1 3 1 3;
+	-fx-background-image: url("../../resources/settingsIconIdle.png");
+	-fx-background-position: left top, center;
+	-fx-background-repeat: no-repeat;
+	-fx-background-size: cover, auto;
 }
 
-.titleClick {
-	
-}
-.titleClick:hover {
-	-fx-text-box-border: transparent;
-	-fx-background-color: transparent;
-	-fx-text-fill: #787878;
+.title:hover {
+	-fx-background-image: url("../../resources/settingsIconHover.png");
+	-fx-background-position: left top, center;
+	-fx-background-repeat: no-repeat;
+	-fx-background-size: cover, auto;	
 }
 
 .coverArtViewer {
@@ -129,3 +133,73 @@
     -fx-background-insets: 1 1 2 1;
     -fx-padding: 0.20em;
 }
+
+
+
+.scrollText {
+	-fx-text-fill: #787878;
+	-fx-background-color: transparent;
+}
+
+.scrollText *.text {
+	-fx-text-alignment: center;
+}
+
+.scrollText .scroll-pane {
+	 -fx-background-color:transparent;
+}
+
+.scrollText .scroll-pane .viewport{
+	 -fx-background-color:transparent;
+}
+
+.scrollText .scroll-pane .content{
+	 -fx-background-color:transparent;
+}
+
+.scrollText .scroll-pane {
+  -fx-background-color: transparent;
+}
+
+.scrollText .scroll-bar .increment-button {
+  visibility: hidden;
+}
+
+.scrollText .scroll-bar .decrement-button {
+  visibility: hidden;
+}
+
+.scrollText .scroll-bar:vertical,
+.scrollText .scroll-bar:horizontal {
+  -fx-background-color: transparent;
+}
+
+.scrollText .scroll-bar:vertical .track-background,
+.scrollText .scroll-bar:horizontal .track-background  {
+  visibility: hidden;
+}
+
+.scrollText .scroll-bar:vertical .track,
+.scrollText .scroll-bar:horizontal .track {
+  -fx-background-color: transparent;
+}
+
+.scrollText .hide-thumb .scroll-bar:vertical .thumb,
+.scrollText .hide-thumb .scroll-bar:horizontal .thumb {
+  -fx-background-color: transparent;
+}
+
+.scrollText .scroll-bar:vertical .thumb,
+.scrollText .scroll-bar:horizontal .thumb {
+  -fx-background-color: transparent;
+  -fx-background-insets: 2, 0, 0;
+  -fx-background-radius: 2;
+}
+
+.scrollText .scroll-bar .increment-arrow,
+.scrollText .scroll-bar .decrement-arrow {
+	-fx-background-color: transparent;
+	-fx-shape: " ";
+	-fx-padding:0;
+}
+

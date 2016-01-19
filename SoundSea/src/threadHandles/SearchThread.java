@@ -3,6 +3,7 @@ package threadHandles;
 import java.io.IOException;
 
 import javafx.scene.control.ProgressBar;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -16,13 +17,13 @@ public class SearchThread extends Thread {
 	public static Image image;
 	
 	private TextField getSearchField;
-	private Text songLabelText;
+	private TextArea songLabelText;
 	private ImageView albumArt;
 	private ImageView loadingImage;
 	private boolean quickDownload;
 	private ProgressBar progressBar;
 
-	public SearchThread(TextField getSearchField, Text songLabelText, ImageView albumArt, ImageView loadingImage, boolean quickDownload, ProgressBar progressBar) {
+	public SearchThread(TextField getSearchField, TextArea songLabelText, ImageView albumArt, ImageView loadingImage, boolean quickDownload, ProgressBar progressBar) {
 		this.getSearchField = getSearchField;
 		this.songLabelText = songLabelText;
 		this.albumArt = albumArt;
@@ -54,7 +55,8 @@ public class SearchThread extends Thread {
 			// get download link for song
 			Connection.getSongFromPleer();
 			
-			songLabelText.setText(FXController.fullTitleList.get(0));	
+			songLabelText.setText(FXController.fullTitleList.get(0));
+			
 			
 			if(quickDownload) {
 				FXController.downloadSong(progressBar);

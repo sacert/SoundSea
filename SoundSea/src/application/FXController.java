@@ -1,13 +1,19 @@
 package application;
 
+import java.awt.Scrollbar;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import com.sun.java.swing.plaf.gtk.GTKConstants.Orientation;
+
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -17,10 +23,14 @@ import javafx.scene.Scene;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.control.Button;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.control.ScrollBar;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -36,12 +46,13 @@ public class FXController implements Initializable {
 	@FXML private TextField getSearchField;
 	@FXML private Button getSearchButton;
 	@FXML private Button downloadButton;
-	@FXML private Text songLabelText;
+	@FXML private TextArea songLabelText;
 	@FXML private ImageView albumArt;
 	@FXML private Pane searchPopup;
 	@FXML private ImageView loadingImage;
 	@FXML private ProgressBar progressBar;
 	@FXML private Button songSeaLogo;
+	@FXML private Pane songLabelPane;
 	
 	public static String songFullTitle = "";
 	public static String songTitle = "";
@@ -82,6 +93,23 @@ public class FXController implements Initializable {
 			return;
 		}
 		downloadSong(progressBar);
+	}
+	
+	@FXML
+	private void searchHandle(ActionEvent event) throws IOException, InterruptedException  {
+		
+		getSearchField.setOnKeyPressed(new EventHandler<KeyEvent>()
+	    {
+	        @Override
+	        public void handle(KeyEvent ke)
+	        {
+	            if (ke.getCode().equals(KeyCode.ENTER))
+	            {
+	            	threadHandles.SearchThread st = new threadHandles.SearchThread(getSearchField, songLabelText, albumArt, loadingImage, false, progressBar);
+	        		st.start();
+	            }
+	        }
+	    });
 	}
 	
 	public static void downloadSong(ProgressBar progressBar) throws IOException, InterruptedException {
@@ -137,12 +165,14 @@ public class FXController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		
+
 		progressBar.setVisible(false);
 		loadingImage.setVisible(false);
 		getSearchField.setStyle("-fx-text-inner-color: #909090");
 		
 		setCoverArtGreyBlock();
+		
+		songLabelText.setEditable(false);
 		
 	}
 	
