@@ -16,8 +16,8 @@ public class UserPreferences {
 	        	 
 	        	 String osName = System.getProperty("os.name");
 	        	 
-	        	 if(osName == "Windows XP" || osName == "Windows Vista" || osName == "Windows 7") 
-	        		 userPrefs.put("folderDirectory", System.getProperty("user.home") + "/My Music/");
+	        	 if(osName.contains("Windows")) 
+	        		 userPrefs.put("folderDirectory", System.getProperty("user.home") + "\\Music\\");
 	        	 else 
 	        		 userPrefs.put("folderDirectory", System.getProperty("user.home") + "/Music/");
 	        	 
