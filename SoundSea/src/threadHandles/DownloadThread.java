@@ -40,11 +40,7 @@ public class DownloadThread extends Thread{
 		
 		// if tmp directory exists, delete it
 		if(path.exists() && path.isDirectory()) {
-			try {
-				Runtime.getRuntime().exec(new String[] {"rm", "-rf", tmpDir + "/SongSea"});
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			new File(tmpDir + "/SongSea").delete();
 		}
 		
 		try {
@@ -92,7 +88,7 @@ public class DownloadThread extends Thread{
 			
 			mp3file.save(FXController.folderDirectory + songTitle +".mp3");
 
-			Runtime.getRuntime().exec(new String[] {"rm", "-rf", tmpDir + "/SongSea"});
+			new File(tmpDir + "/SongSea").delete();
 			
 			progressBar.setVisible(false);
 			progressBar.setProgress(0);
