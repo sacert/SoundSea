@@ -2,17 +2,12 @@ package application;
 	
 import java.io.IOException;
 
-import com.mpatric.mp3agic.Mp3File;
-
 import javafx.application.Application;
-import javafx.event.ActionEvent;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.effect.DropShadow;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
