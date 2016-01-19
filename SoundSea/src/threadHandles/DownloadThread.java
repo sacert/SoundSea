@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.net.URL;
 
 import com.mpatric.mp3agic.ID3v2;
-import com.mpatric.mp3agic.ID3v24Tag;
+import com.mpatric.mp3agic.ID3v23Tag;
 import com.mpatric.mp3agic.InvalidDataException;
 import com.mpatric.mp3agic.Mp3File;
 import com.mpatric.mp3agic.NotSupportedException;
@@ -74,7 +74,7 @@ public class DownloadThread extends Thread{
 			mp3file.removeId3v2Tag();
 			
 			// insert metadata
-			ID3v2 id3v2Tag = new ID3v24Tag();
+			ID3v2 id3v2Tag = new ID3v23Tag();
 			mp3file.setId3v2Tag(id3v2Tag);
 			id3v2Tag.setArtist(FXController.bandArtist);
 			id3v2Tag.setTitle(FXController.songTitle);
