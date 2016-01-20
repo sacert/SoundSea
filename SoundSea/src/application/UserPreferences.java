@@ -23,7 +23,7 @@ public class UserPreferences {
 	        	 
 	         } 
 	         FXController.folderDirectory = userPrefs.get("folderDirectory", null);
-	             
+
 	         System.out.println(FXController.folderDirectory);
 	     } catch (BackingStoreException ex) {
 	         System.err.println(ex);

@@ -47,14 +47,14 @@
 	-fx-background-insets: 0;
 	-fx-background-radius: 5;
 	-fx-padding: 1 3 1 3;
-	-fx-background-image: url("../../resources/settingsIconIdle.png");
+	-fx-background-image: url("../resources/settingsIconIdle.png");
 	-fx-background-position: left top, center;
 	-fx-background-repeat: no-repeat;
 	-fx-background-size: cover, auto;
 }
 
 .title:hover {
-	-fx-background-image: url("../../resources/settingsIconHover.png");
+	-fx-background-image: url("../resources/settingsIconHover.png");
 	-fx-background-position: left top, center;
 	-fx-background-repeat: no-repeat;
 	-fx-background-size: cover, auto;	
@@ -65,14 +65,14 @@
 }
 
 .downloadButton {
-	-fx-background-image: url("../../resources/downloadButton.jpg");
+	-fx-background-image: url("../resources/downloadButton.jpg");
 	-fx-background-position: left top, center;
 	-fx-background-repeat: no-repeat;
 	-fx-background-size: cover, auto;
 }
 
 .downloadButton:hover {
-	-fx-background-image: url("../../resources/hoverDownloadButton.jpg");
+	-fx-background-image: url("../resources/hoverDownloadButton.jpg");
 	-fx-background-position: left top, center;
 	-fx-background-repeat: no-repeat;
 	-fx-background-size: cover, auto;
@@ -93,14 +93,14 @@
 }
 
 .closeButton {
-	-fx-background-image: url("../../resources/closeIconButton.png");
+	-fx-background-image: url("../resources/closeIconButton.png");
 	-fx-background-position: left top, center;
 	-fx-background-repeat: no-repeat;
 	-fx-background-size: cover, auto;
 }
 
 .minimizeButton {
-	-fx-background-image: url("../../resources/minimizeIconButton.png");
+	-fx-background-image: url("../resources/minimizeIconButton.png");
 	-fx-background-position: left top, center;
 	-fx-background-repeat: no-repeat;
 	-fx-background-size: cover, auto;
@@ -125,7 +125,7 @@
 }
 
 .loadingImage {
-	-fx-background-image: url("../../resources/minimizeIconButton.png");
+	-fx-background-image: url("../resources/minimizeIconButton.png");
 }
 
 .progress-bar > .bar {

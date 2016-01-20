@@ -62,7 +62,7 @@
       </Button>
       <ImageView fx:id="loadingImage" fitHeight="14.0" fitWidth="23.0" layoutX="364.0" layoutY="95.0" pickOnBounds="true" preserveRatio="true" styleClass="loadingImage">
          <image>
-            <Image url="@../../resources/loading.gif" />
+            <Image url="@../resources/loading.gif" />
          </image></ImageView>
       <ProgressBar fx:id="progressBar" layoutX="20.0" layoutY="184.0" prefHeight="6.0" prefWidth="423.0" progress="0.0" styleClass="progressBar" stylesheets="@application.css" />
       <Button fx:id="songSeaLogo" layoutX="6.0" layoutY="4.0" mnemonicParsing="false" onAction="#handleSettings" prefHeight="23.0" prefWidth="30.0" scaleX="0.6" scaleY="0.6" textFill="#787878">

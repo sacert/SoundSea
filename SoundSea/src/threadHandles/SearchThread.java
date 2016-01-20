@@ -38,6 +38,8 @@ public class SearchThread extends Thread {
 			return;
 		}
 		try {
+			
+			
 			boolean validSong;
 			image = null;
 			// reset GUI view
@@ -85,7 +87,7 @@ public class SearchThread extends Thread {
 				albumArt.setImage(image);
 			}
 			else {
-				File imgFile = new File("resources/placeholder.png");
+				File imgFile = new File("src/resources/placeholder.png");
 				System.out.println(imgFile.toURI().toString());
 				Image image = new Image(imgFile.toURI().toString());
 				albumArt.setImage(image);
