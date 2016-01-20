@@ -26,10 +26,6 @@ public class CoverArtThread extends Thread{
 			BufferedImage img = null;
 			img = ImageIO.read(coverArtUrl);
 			
-			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			
-			imageByte = baos.toByteArray();
-			
 			if(img.getHeight() != img.getWidth()) {
 				int newSize;
 				if(img.getHeight() < img.getWidth())
@@ -44,12 +40,16 @@ public class CoverArtThread extends Thread{
 				g.dispose();
 				
 				image = SwingFXUtils.toFXImage(newImage, null);
+				ByteArrayOutputStream baos = new ByteArrayOutputStream();
 				ImageIO.write(newImage, "jpeg", baos);
+				imageByte = baos.toByteArray();
 				
 			}
 			else {
 				image = SwingFXUtils.toFXImage(img, null);
+				ByteArrayOutputStream baos = new ByteArrayOutputStream();
 				ImageIO.write(img, "jpeg", baos);
+				imageByte = baos.toByteArray();
 			}
 			
 			SearchThread.image = image;
