@@ -156,12 +156,12 @@ public class Connection {
 				
 		FXController.bandArtist = FXController.bandArtist.replaceAll("\\bfeat\\b", "");
 		FXController.songTitle = FXController.songTitle.replaceAll("\\bfeat\\b", "");
-		FXController.bandArtist = FXController.bandArtist.replaceAll("[!@#$%^&*(){}:\"<>?]", "");
-		FXController.songTitle = FXController.songTitle.replaceAll("[!@#$%^&*(){}:\"<>?]", "");
+		FXController.bandArtist = FXController.bandArtist.replaceAll("\\(.*\\)","");//.replaceAll("[!@#$%^&*(){}:\"<>?]", "");
+		FXController.songTitle = FXController.songTitle.replaceAll("\\(.*\\)","");//.replaceAll("[!@#$%^&*(){}:\"<>?]", "");
 		FXController.bandArtist = deAccent(FXController.bandArtist);
 		FXController.songTitle = deAccent(FXController.songTitle);
 
-		String fullURLPath = "http://www.pleer.com/browser-extension/search?q=" + FXController.bandArtist.replace(" ", "+") + "+" +FXController.songTitle.replace(" ", "+");
+		String fullURLPath = "http://www.pleer.com/browser-extension/search?q=" + FXController.bandArtist.replace(" ", "+").replaceAll("[!@#$%^&*(){}:\"<>?]", "") + "+" +FXController.songTitle.replace(" ", "+").replaceAll("[!@#$%^&*(){}:\"<>?]", "");;
 		
 		System.out.println(fullURLPath);
 		
@@ -202,7 +202,7 @@ public class Connection {
 
 		String fullURLPath = "https://itunes.apple.com/search?term=" + songInfoQuery.replace(" ", "+");
 		
-		System.out.println(fullURLPath);
+		System.out.println("!" + fullURLPath.toString());
 		
 		URL url = new URL(fullURLPath);
 		HttpURLConnection request = (HttpURLConnection) url.openConnection();
