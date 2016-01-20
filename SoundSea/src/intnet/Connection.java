@@ -9,8 +9,10 @@ import java.io.Reader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
+import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
+import java.nio.charset.StandardCharsets;
 import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.List;
@@ -214,7 +216,7 @@ public class Connection {
 		request.connect();
 		
 		JsonParser jp = new JsonParser();
-		JsonElement root = jp.parse(new InputStreamReader((InputStream) request.getContent()));
+		JsonElement root = jp.parse(new InputStreamReader((InputStream) request.getContent(), StandardCharsets.UTF_8));
 		JsonObject rootobj = root.getAsJsonObject();
 		JsonArray arr = rootobj.getAsJsonArray("results");
 		try {
@@ -242,7 +244,7 @@ public class Connection {
 		// parse artist
 		rootobj = arr.get(itunesIndex).getAsJsonObject();
 		FXController.bandArtist = (rootobj.get("artistName").toString().replace("\"", ""));
-		
+
 		// parse song title
 		rootobj = arr.get(itunesIndex).getAsJsonObject();
 		FXController.songTitle = (rootobj.get("trackName").toString().replace("\"", ""));
