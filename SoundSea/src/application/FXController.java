@@ -31,6 +31,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import threadHandles.DownloadThread;
 
 public class FXController implements Initializable {
 
@@ -84,11 +85,15 @@ public class FXController implements Initializable {
 		if(songLabelText.getText().isEmpty()) {
 			return;
 		}
+					
 		downloadSong(progressBar);
 	}
 	
 	public static void downloadSong(ProgressBar progressBar) throws IOException, InterruptedException {
 		
+		if( DownloadThread.downloading) {
+			return;
+		}
 		threadHandles.DownloadThread dt = new threadHandles.DownloadThread(fullTitleList.get(0), progressBar);
 		dt.start();
 	}

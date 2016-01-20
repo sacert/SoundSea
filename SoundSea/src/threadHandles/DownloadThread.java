@@ -20,6 +20,7 @@ public class DownloadThread extends Thread{
 	
 	private String songTitle;
 	private ProgressBar progressBar;
+	public static boolean downloading;
 
 	public DownloadThread(String songTitle, ProgressBar progressBar)
 	{
@@ -30,6 +31,7 @@ public class DownloadThread extends Thread{
 	@Override
 	public void run()
 	{
+		downloading = true;
 		// get system info to store temp folder + files
 		String userName = System.getProperty("user.name");
 		String tmpDir = System.getProperty("java.io.tmpdir");
@@ -94,6 +96,7 @@ public class DownloadThread extends Thread{
 			
 			progressBar.setVisible(false);
 			progressBar.setProgress(0);
+			downloading = false;
 		} catch (IOException | UnsupportedTagException | InvalidDataException | NotSupportedException e) {
 			e.printStackTrace();
 		}
