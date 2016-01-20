@@ -1,10 +1,14 @@
 package threadHandles;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 
 import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 
+import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -38,8 +42,6 @@ public class SearchThread extends Thread {
 			return;
 		}
 		try {
-			
-			
 			boolean validSong;
 			image = null;
 			// reset GUI view
@@ -87,10 +89,9 @@ public class SearchThread extends Thread {
 				albumArt.setImage(image);
 			}
 			else {
-				File imgFile = new File("src/resources/placeholder.png");
-				System.out.println(imgFile.toURI().toString());
-				Image image = new Image(imgFile.toURI().toString());
-				albumArt.setImage(image);
+				BufferedImage image = ImageIO.read(getClass().getClassLoader().getResource("resources/placeholder.png"));
+				Image test = SwingFXUtils.toFXImage(image, null);
+				albumArt.setImage(test);
 				loadingImage.setVisible(false);
 			}
 		} catch (IOException | InterruptedException e) {
