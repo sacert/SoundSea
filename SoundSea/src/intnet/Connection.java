@@ -11,6 +11,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
+import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -157,8 +158,8 @@ public class Connection {
 		FXController.songTitle = FXController.songTitle.replaceAll("\\bfeat\\b", "");
 		FXController.bandArtist = FXController.bandArtist.replaceAll("[!@#$%^&*(){}:\"<>?]", "");
 		FXController.songTitle = FXController.songTitle.replaceAll("[!@#$%^&*(){}:\"<>?]", "");
-		FXController.bandArtist = FXController.bandArtist.replaceAll("é", "e");
-		FXController.songTitle = FXController.songTitle.replaceAll("é", "e");
+		FXController.bandArtist = deAccent(FXController.bandArtist);
+		FXController.songTitle = deAccent(FXController.songTitle);
 
 		String fullURLPath = "http://www.pleer.com/browser-extension/search?q=" + FXController.bandArtist.replace(" ", "+") + "+" +FXController.songTitle.replace(" ", "+");
 		
@@ -200,6 +201,8 @@ public class Connection {
 	public static void getiTunesSongInfo(String songInfoQuery) throws IOException {
 
 		String fullURLPath = "https://itunes.apple.com/search?term=" + songInfoQuery.replace(" ", "+");
+		
+		System.out.println(fullURLPath);
 		
 		URL url = new URL(fullURLPath);
 		HttpURLConnection request = (HttpURLConnection) url.openConnection();
@@ -294,4 +297,10 @@ public class Connection {
 	    }          
 	    return sb.toString().trim();
 	}  
+	
+	private static String deAccent(String str) {
+	    String nfdNormalizedString = Normalizer.normalize(str, Normalizer.Form.NFD); 
+	    Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
+	    return pattern.matcher(nfdNormalizedString).replaceAll("");
+	}
 }

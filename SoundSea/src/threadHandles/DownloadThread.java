@@ -81,7 +81,11 @@ public class DownloadThread extends Thread{
 			if(FXController.albumTitle != "") 
 				id3v2Tag.setAlbum(FXController.albumTitle);
 			id3v2Tag.setYear(FXController.albumYear);
+			try {
 			id3v2Tag.setGenreDescription(FXController.genre);
+			} catch(IllegalArgumentException e) {
+				System.out.println("Can't set genre");
+			}
 			id3v2Tag.setAlbumImage(CoverArtThread.imageByte, "image/jpeg");
 			
 			mp3file.save(FXController.folderDirectory + songTitle +".mp3");
