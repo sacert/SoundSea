@@ -7,5 +7,6 @@
 	<classpathentry kind="lib" path="lib/gson-2.5.jar"/>
 	<classpathentry kind="lib" path="lib/commons-io-2.2-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="lib/mp3agic-0.8.4-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="lib/jl1.0.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

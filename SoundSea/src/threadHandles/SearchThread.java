@@ -1,8 +1,10 @@
 package threadHandles;
 
 import java.awt.image.BufferedImage;
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 
 import javax.imageio.ImageIO;
@@ -14,6 +16,8 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javazoom.jl.decoder.JavaLayerException;
+import javazoom.jl.player.Player;
 import application.FXController;
 import intnet.Connection;
 
@@ -96,6 +100,18 @@ public class SearchThread extends Thread {
 			}
 		} catch (IOException | InterruptedException e) {
 			loadingImage.setVisible(false);
+			e.printStackTrace();
+		}
+		
+		// play song in application
+		String song = FXController.fileList.get(0);
+        Player mp3player = null;
+        BufferedInputStream in = null;
+	    try {
+			in = new BufferedInputStream(new URL(song).openStream());
+			mp3player = new Player(in);
+			mp3player.play();
+		} catch (IOException | JavaLayerException e) {
 			e.printStackTrace();
 		}
 				
