@@ -37,6 +37,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import application.FXController;
+import application.SettingController;
 
 public class Connection {
 	
@@ -197,8 +198,21 @@ public class Connection {
 			Matcher m6 = Pattern.compile("cover", Pattern.CASE_INSENSITIVE).matcher(rootobj.get("track").toString());
 			
 			if(m1.find() && m2.find() && !m3.find() && !m4.find() && !m5.find() && !m6.find()) {
-				fileList.add(rootobj.get("file").toString().replace("\"", ""));
-				fullTitleList.add(rootobj.get("artist").toString().replace("\"", "") + " - " + rootobj.get("track").toString().replace("\"", ""));
+				System.out.println(FXController.isHighQuality);
+				if(FXController.isHighQuality) {
+					if(!(rootobj.get("bitrate").toString().contains("VBR"))) {
+						if(Integer.parseInt(rootobj.get("bitrate").toString().substring(1, 4)) >= 256) {
+							System.out.println("high");
+							fileList.add(rootobj.get("file").toString().replace("\"", ""));
+							fullTitleList.add(rootobj.get("artist").toString().replace("\"", "") + " - " + rootobj.get("track").toString().replace("\"", ""));
+						}
+					}
+				}
+				else {
+					System.out.println("low");
+					fileList.add(rootobj.get("file").toString().replace("\"", ""));
+					fullTitleList.add(rootobj.get("artist").toString().replace("\"", "") + " - " + rootobj.get("track").toString().replace("\"", ""));
+				}
 			}
 		}
 		

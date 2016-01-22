@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -18,8 +20,11 @@ import javafx.scene.Scene;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.control.Button;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Toggle;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.KeyCode;
@@ -64,6 +69,7 @@ public class FXController implements Initializable {
 	
 	public static int imageIndex = 0;
 	public static WritableImage greyImage;
+	public static Boolean isHighQuality;
 
 	@FXML
 	private void handleQuickDownloadAction(ActionEvent event) throws IOException, InterruptedException  {
@@ -122,10 +128,10 @@ public class FXController implements Initializable {
 					stage.initModality(Modality.NONE);
 					stage.initStyle(StageStyle.UNDECORATED);
 					
-					Scene scene = new Scene(root,444,78);
+					Scene scene = new Scene(root,444,159);
 					scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 					
-					Rectangle rect = new Rectangle(444, 78);
+					Rectangle rect = new Rectangle(444, 159);
 					rect.setArcHeight(10);
 					rect.setArcWidth(10);
 					root.setClip(rect);
