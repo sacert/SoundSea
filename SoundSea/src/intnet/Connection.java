@@ -198,8 +198,8 @@ public class Connection {
 			Matcher m6 = Pattern.compile("cover", Pattern.CASE_INSENSITIVE).matcher(rootobj.get("track").toString());
 			
 			if(m1.find() && m2.find() && !m3.find() && !m4.find() && !m5.find() && !m6.find()) {
-				System.out.println(FXController.isHighQuality);
-				if(FXController.isHighQuality) {
+				System.out.println(FXController.qualityLevel.equals("high"));
+				if(FXController.qualityLevel.equals("high")) {
 					if(!(rootobj.get("bitrate").toString().contains("VBR"))) {
 						if(Integer.parseInt(rootobj.get("bitrate").toString().substring(1, 4)) >= 256) {
 							System.out.println("high");

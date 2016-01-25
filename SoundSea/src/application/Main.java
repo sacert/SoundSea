@@ -1,6 +1,7 @@
 package application;
 	
 import java.io.IOException;
+import java.util.prefs.BackingStoreException;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -53,7 +54,7 @@ public class Main extends Application {
 			e.printStackTrace();
 		}
 	}
-	public static void main(String[] args) throws IOException, InterruptedException {
+	public static void main(String[] args) throws IOException, InterruptedException, BackingStoreException {
 		
 		UserPreferences.getPreferences();
 		launch(args);

@@ -62,10 +62,9 @@ public class SettingController implements Initializable{
 				
 				
 				if(group.selectedToggleProperty().toString().contains("High")) {
-					FXController.isHighQuality = true;
-					System.out.println("wow");
+					UserPreferences.setQuality("high");
 				} else {
-					FXController.isHighQuality = false;
+					UserPreferences.setQuality("low");
 				}
 				
 			}
@@ -79,6 +78,9 @@ public class SettingController implements Initializable{
 		highQualityRadio.setToggleGroup(group);
 		lowQualityRadio.setToggleGroup(group);
 		
-		
+		if(FXController.qualityLevel.equals("high"))
+			highQualityRadio.fire();
+		else
+			lowQualityRadio.fire();
 	}
 }

@@ -69,7 +69,7 @@ public class FXController implements Initializable {
 	
 	public static int imageIndex = 0;
 	public static WritableImage greyImage;
-	public static Boolean isHighQuality;
+	public static String qualityLevel;
 
 	@FXML
 	private void handleQuickDownloadAction(ActionEvent event) throws IOException, InterruptedException  {
