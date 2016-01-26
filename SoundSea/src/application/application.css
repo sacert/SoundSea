@@ -80,9 +80,9 @@
 
 .menuButton {
 	-fx-text-box-border: transparent;
-	-fx-background-color: f1f1f1;
 	-fx-background-insets: 0;
 	-fx-background-radius: 8;
+	-fx-background-color: white;
 }
 
 .menuButton:hover {
@@ -202,4 +202,32 @@
 	-fx-shape: " ";
 	-fx-padding:0;
 }
+
+.playButton {
+	-fx-background-image: url("../resources/play.png");
+	-fx-background-position: left top, center;
+	-fx-background-repeat: no-repeat;
+	-fx-background-size: cover, auto;
+}
+
+.pauseButton {
+	-fx-background-image: url("../resources/pause.png");
+	-fx-background-position: left top, center;
+	-fx-background-repeat: no-repeat;
+	-fx-background-size: cover, auto;
+}
+
+.songControl {
+	-fx-text-box-border: transparent;
+	-fx-background-radius: 5;
+	-fx-background-color: white;
+}
+
+.songControl:hover {
+	-fx-text-box-border: transparent;
+	-fx-background-color: e9e9e9;
+	-fx-background-insets: 0;
+	-fx-background-radius: 5;
+}
+
 

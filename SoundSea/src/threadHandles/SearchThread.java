@@ -11,6 +11,7 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
 import javafx.embed.swing.SwingFXUtils;
+import javafx.scene.control.Button;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -31,14 +32,18 @@ public class SearchThread extends Thread {
 	private ImageView loadingImage;
 	private boolean quickDownload;
 	private ProgressBar progressBar;
+	private Button playButton;
+	private Button pauseButton;
 
-	public SearchThread(TextField getSearchField, TextArea songLabelText, ImageView albumArt, ImageView loadingImage, boolean quickDownload, ProgressBar progressBar) {
+	public SearchThread(TextField getSearchField, TextArea songLabelText, ImageView albumArt, ImageView loadingImage, boolean quickDownload, ProgressBar progressBar, Button playButton, Button pauseButton) {
 		this.getSearchField = getSearchField;
 		this.songLabelText = songLabelText;
 		this.albumArt = albumArt;
 		this.loadingImage = loadingImage;
 		this.quickDownload = quickDownload;
 		this.progressBar = progressBar;
+		this.playButton = playButton;
+		this.pauseButton = pauseButton;
 	}
 	
 	public void run() {
@@ -49,6 +54,8 @@ public class SearchThread extends Thread {
 			boolean validSong;
 			image = null;
 			// reset GUI view
+			playButton.setVisible(false);
+			pauseButton.setVisible(false);
 			albumArt.setImage(FXController.greyImage);
 			if(songLabelText.toString() != "") 
 				songLabelText.setText("");
@@ -91,6 +98,12 @@ public class SearchThread extends Thread {
 				albumArt.setImage(null);
 				loadingImage.setVisible(false);
 				albumArt.setImage(image);
+				playButton.setVisible(true);
+				
+				if(FXController.songPlaying == true) {
+					FXController.songPlaying = false;
+					SongControl.stopSong();
+				}
 			}
 			else {
 				BufferedImage image = ImageIO.read(getClass().getClassLoader().getResource("resources/placeholder.png"));
@@ -100,18 +113,6 @@ public class SearchThread extends Thread {
 			}
 		} catch (IOException | InterruptedException e) {
 			loadingImage.setVisible(false);
-			e.printStackTrace();
-		}
-		
-		// play song in application
-		String song = FXController.fileList.get(0);
-        Player mp3player = null;
-        BufferedInputStream in = null;
-	    try {
-			in = new BufferedInputStream(new URL(song).openStream());
-			mp3player = new Player(in);
-			mp3player.play();
-		} catch (IOException | JavaLayerException e) {
 			e.printStackTrace();
 		}
 				

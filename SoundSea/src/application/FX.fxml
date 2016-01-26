@@ -86,5 +86,23 @@
             </RadialGradient>
          </textFill>
       </Label>
+      <Button fx:id="playButton" layoutX="419.0" layoutY="149.0" mnemonicParsing="false" onAction="#handlePlayButton" prefHeight="25.0" prefWidth="25.0" scaleX="0.8" scaleY="0.8" stylesheets="@application.css">
+         <styleClass>
+            <String fx:value="songControl" />
+            <String fx:value="playButton" />
+         </styleClass>
+         <padding>
+            <Insets top="5.0" />
+         </padding>
+      </Button>
+      <Button fx:id="pauseButton" layoutX="419.0" layoutY="149.0" mnemonicParsing="false" onAction="#handlePauseButton" prefHeight="25.0" prefWidth="25.0" scaleX="0.8" scaleY="0.8" stylesheets="@application.css">
+         <padding>
+            <Insets top="5.0" />
+         </padding>
+         <styleClass>
+            <String fx:value="songControl" />
+            <String fx:value="pauseButton" />
+         </styleClass>
+      </Button>
    </children>
 </Pane>

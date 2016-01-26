@@ -1,11 +1,14 @@
 package application;
 
+import java.io.BufferedInputStream;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import jaco.mp3.player.MP3Player;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -36,7 +39,11 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javazoom.jl.decoder.JavaLayerException;
+import javazoom.jl.player.Player;
+import javazoom.jl.player.advanced.AdvancedPlayer;
 import threadHandles.DownloadThread;
+import threadHandles.SongControl;
 
 public class FXController implements Initializable {
 
@@ -51,6 +58,8 @@ public class FXController implements Initializable {
 	@FXML private ProgressBar progressBar;
 	@FXML private Button songSeaLogo;
 	@FXML private Pane songLabelPane;
+	@FXML private Button playButton;
+	@FXML private Button pauseButton;
 	
 	public static String songFullTitle = "";
 	public static String songTitle = "";
@@ -70,18 +79,22 @@ public class FXController implements Initializable {
 	public static int imageIndex = 0;
 	public static WritableImage greyImage;
 	public static String qualityLevel;
+	public static int songTime = 0;
+	
+	private MP3Player mp3player = null;
+	public static Boolean songPlaying = false;
 
 	@FXML
 	private void handleQuickDownloadAction(ActionEvent event) throws IOException, InterruptedException  {
 		
-		threadHandles.SearchThread st = new threadHandles.SearchThread(getSearchField, songLabelText, albumArt, loadingImage, true, progressBar);
+		threadHandles.SearchThread st = new threadHandles.SearchThread(getSearchField, songLabelText, albumArt, loadingImage, true, progressBar, playButton, pauseButton);
 		st.start();
 	}
 	
 	@FXML
 	private void handleSearchAction(ActionEvent event) throws IOException, InterruptedException  {
 		
-		threadHandles.SearchThread st = new threadHandles.SearchThread(getSearchField, songLabelText, albumArt, loadingImage, false, progressBar);
+		threadHandles.SearchThread st = new threadHandles.SearchThread(getSearchField, songLabelText, albumArt, loadingImage, false, progressBar, playButton, pauseButton);
 		st.start();
 	}
 	
@@ -107,6 +120,35 @@ public class FXController implements Initializable {
 	@FXML
 	private void handleCloseAction(ActionEvent event) {
 		System.exit(0);
+	}
+	
+	@FXML
+	private void handlePlayButton(ActionEvent event) throws MalformedURLException, IOException, JavaLayerException {
+
+		if(!songPlaying) {
+			String song = fileList.get(0);
+			SongControl sc = new SongControl(mp3player,song);
+			sc.start();
+			songPlaying = true;
+			pauseButton.setVisible(true);
+			playButton.setVisible(false);
+		} 
+		else {
+			SongControl.resumeSong();
+			playButton.setVisible(false);
+			pauseButton.setVisible(true);
+		}
+	}
+	
+	@FXML
+	private void handlePauseButton(ActionEvent event) throws JavaLayerException {
+		
+		//if(songPlaying) {
+			SongControl.pauseSong();
+			playButton.setVisible(true);
+			pauseButton.setVisible(false);
+			//songPlaying = false;
+		//}
 	}
 	
 	@FXML
@@ -158,6 +200,8 @@ public class FXController implements Initializable {
 		
 		setCoverArtGreyBlock();
 		
+		playButton.setVisible(false);
+		pauseButton.setVisible(false);
 		songLabelText.setEditable(false);
 		
 		getSearchField.setOnKeyPressed(new EventHandler<KeyEvent>()
@@ -167,7 +211,7 @@ public class FXController implements Initializable {
 	        {
 	            if (ke.getCode().equals(KeyCode.ENTER))
 	            {
-	            	threadHandles.SearchThread st = new threadHandles.SearchThread(getSearchField, songLabelText, albumArt, loadingImage, false, progressBar);
+	            	threadHandles.SearchThread st = new threadHandles.SearchThread(getSearchField, songLabelText, albumArt, loadingImage, false, progressBar, playButton, pauseButton);
 	        		st.start();
 	            }
 	        }
