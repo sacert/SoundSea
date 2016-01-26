@@ -202,14 +202,14 @@ public class Connection {
 				if(FXController.qualityLevel.equals("high")) {
 					if(!(rootobj.get("bitrate").toString().contains("VBR"))) {
 						if(Integer.parseInt(rootobj.get("bitrate").toString().substring(1, 4)) >= 256) {
-							System.out.println("high");
+							System.out.println(rootobj.get("bitrate").toString());
 							fileList.add(rootobj.get("file").toString().replace("\"", ""));
 							fullTitleList.add(rootobj.get("artist").toString().replace("\"", "") + " - " + rootobj.get("track").toString().replace("\"", ""));
 						}
 					}
 				}
-				else {
-					System.out.println("low");
+				else if (rootobj.get("bitrate").toString().contains("VBR") || Integer.parseInt(rootobj.get("bitrate").toString().substring(1, 4)) < 256){
+					System.out.println(rootobj.get("bitrate").toString());
 					fileList.add(rootobj.get("file").toString().replace("\"", ""));
 					fullTitleList.add(rootobj.get("artist").toString().replace("\"", "") + " - " + rootobj.get("track").toString().replace("\"", ""));
 				}
