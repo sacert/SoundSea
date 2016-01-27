@@ -160,6 +160,8 @@ public class Connection {
 		String bandArtist;
 		String songTitle;
 		
+		// delete everything after feat
+		
 		bandArtist = FXController.bandArtist.replaceAll("\\bfeat\\b", "");
 		songTitle = FXController.songTitle.replaceAll("\\bfeat\\b", "");
 		bandArtist = FXController.bandArtist.replaceAll("\\(.*\\)","");//.replaceAll("[!@#$%^&*(){}:\"<>?]", "");
@@ -213,23 +215,20 @@ public class Connection {
 			//if(rootobj.get("track").toString().contains(FXController.bandArtist))
 				//artistInTrack = true;
 			
-			System.out.println(FXController.bandArtist + rootobj.get("track").toString());
+//			System.out.println(FXController.bandArtist + rootobj.get("track").toString());
 			
 			// make sure to get only songs that aren't modifications
-			if(m1.find() && m2.find() && !m3.find() && !m4.find() && !m5.find() && !m6.find() && !m7.find() && !m8.find() && !m9.find() && !m10.find() && !m11.find() && !m12.find() && correctArtist) {
+			if(m1.find() && m2.find() && !m3.find() && !m4.find() && !m5.find() && !m6.find() && !m7.find() && !m8.find() && !m9.find() && !m10.find() && !m11.find() && !m12.find()) {
 				// searching through either high or low quality songs, depending on the setting that has been set
-				System.out.println(rootobj.get("bitrate").toString());
 				if(rootobj.get("bitrate").toString().contains("VBR") || !(Integer.parseInt(rootobj.get("bitrate").toString().substring(1,2)) >= 4)) {
 					if(FXController.qualityLevel.equals("high")) {
 						if(!(rootobj.get("bitrate").toString().contains("VBR"))) {
 							if( Integer.parseInt(rootobj.get("bitrate").toString().substring(1, 4)) >= 256) {
-								System.out.println("high quality");
 								fileList.add(rootobj.get("file").toString().replace("\"", ""));
 								fullTitleList.add(rootobj.get("artist").toString().replace("\"", "") + " - " + rootobj.get("track").toString().replace("\"", ""));
 							}
 						}
 					} else if (rootobj.get("bitrate").toString().contains("VBR") || Integer.parseInt(rootobj.get("bitrate").toString().substring(1, 4)) < 256){
-						System.out.println("low quality");
 						fileList.add(rootobj.get("file").toString().replace("\"", ""));
 						fullTitleList.add(rootobj.get("artist").toString().replace("\"", "") + " - " + rootobj.get("track").toString().replace("\"", ""));
 					}
@@ -281,9 +280,11 @@ public class Connection {
 		
 		//FXController.bandArtist = 
 		//FXController.songTitle = FXController.songTitle.replaceAll("\\bfeat\\b", "");
-		FXController.fileList.add(fileList.get(0));
-		FXController.fullTitleList.add(FXController.bandArtist + " - " + FXController.songTitle);
-		//FXController.fullTitleList.add(fullTitleList.get(0));
+		FXController.fileList = (fileList);
+		//FXController.fullTitleList.add(FXController.bandArtist + " - " + FXController.songTitle);
+		FXController.fullTitleList = (fullTitleList);
+		
+		System.out.println(fullTitleList);
 	}
 
 	public static void getiTunesSongInfo(String songInfoQuery) throws IOException {

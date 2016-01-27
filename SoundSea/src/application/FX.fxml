@@ -40,6 +40,8 @@
          <children>
             <Text fill="#787878" layoutX="7.0" layoutY="17.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="218.68292617797852" />
             <TextArea fx:id="songLabelText" layoutX="7.0" layoutY="-2.0" prefHeight="62.0" prefWidth="219.0" styleClass="scrollText" />
+            <Button layoutX="212.0" layoutY="-2.0" mnemonicParsing="false" onAction="#handleRightSearch" text="&gt;" />
+            <Button layoutY="-2.0" mnemonicParsing="false" onAction="#handleLeftSearch" text="&lt;" />
          </children>
       </Pane>
       <Button layoutX="437.0" layoutY="7.0" mnemonicParsing="false" onAction="#handleCloseAction" prefHeight="18.0" prefWidth="18.0" scaleX="0.8" scaleY="0.8" stylesheets="@application.css">

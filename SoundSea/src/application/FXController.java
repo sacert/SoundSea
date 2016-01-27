@@ -83,6 +83,7 @@ public class FXController implements Initializable {
 	
 	private MP3Player mp3player = null;
 	public static Boolean songPlaying = false;
+	public static int fileCounter = 0;
 
 	@FXML
 	private void handleQuickDownloadAction(ActionEvent event) throws IOException, InterruptedException  {
@@ -125,18 +126,29 @@ public class FXController implements Initializable {
 	@FXML
 	private void handlePlayButton(ActionEvent event) throws MalformedURLException, IOException, JavaLayerException {
 
+		int currSong = 0;
+		
 		if(!songPlaying) {
-			String song = fileList.get(0);
+			currSong = fileCounter;
+			String song = fileList.get(fileCounter);
 			SongControl sc = new SongControl(mp3player,song);
 			sc.start();
 			songPlaying = true;
 			pauseButton.setVisible(true);
 			playButton.setVisible(false);
 		} 
-		else {
+		else if (currSong == fileCounter){
 			SongControl.resumeSong();
 			playButton.setVisible(false);
 			pauseButton.setVisible(true);
+		}
+		else {
+			String song = fileList.get(fileCounter);
+			SongControl sc = new SongControl(mp3player,song);
+			sc.start();
+			songPlaying = true;
+			pauseButton.setVisible(true);
+			playButton.setVisible(false);
 		}
 	}
 	
@@ -149,6 +161,32 @@ public class FXController implements Initializable {
 			pauseButton.setVisible(false);
 			//songPlaying = false;
 		//}
+	}
+	
+	@FXML
+	private void handleLeftSearch(ActionEvent event) throws JavaLayerException {
+		
+		if(fileCounter == 0) {
+			fileCounter = fullTitleList.size() - 1;
+		} else {
+			fileCounter--;
+		}
+		System.out.println(fileCounter);
+		
+		songLabelText.setText(fullTitleList.get(fileCounter));
+
+	}
+	
+	@FXML
+	private void handleRightSearch(ActionEvent event) throws JavaLayerException {
+		if(fileCounter == fullTitleList.size() - 1) {
+			fileCounter = 0;
+		} else {
+			fileCounter++;
+		}
+		System.out.println(fileCounter);
+		
+		songLabelText.setText(fullTitleList.get(fileCounter));
 	}
 	
 	@FXML

@@ -58,7 +58,7 @@ public class DownloadThread extends Thread{
 			
 			long time1 = System.currentTimeMillis();
 			// download file
-			URL url = new URL(FXController.fileList.get(0));
+			URL url = new URL(FXController.fileList.get(FXController.fileCounter));
 			int size = url.openConnection().getContentLength();
 			//FileUtils.copyURLToFile(url, file);
 			
