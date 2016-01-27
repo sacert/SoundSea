@@ -1,17 +1,10 @@
 package threadHandles;
 
-import java.io.BufferedInputStream;
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import application.FXController;
 import jaco.mp3.player.MP3Player;
 import javazoom.jl.decoder.JavaLayerException;
-import javazoom.jl.player.Player;
-import javazoom.jl.player.advanced.AdvancedPlayer;
-import javazoom.jl.player.advanced.PlaybackEvent;
-import javazoom.jl.player.advanced.PlaybackListener;
 
 public class SongControl extends Thread {
 

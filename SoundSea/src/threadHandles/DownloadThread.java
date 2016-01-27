@@ -44,6 +44,12 @@ public class DownloadThread extends Thread{
 		}
 		
 		try {
+			String bandArtist = FXController.bandArtist;
+			String songTitle = FXController.songTitle;
+			String albumTitle = FXController.albumTitle;
+			String albumYear = FXController.albumYear;
+			String genre = FXController.genre;
+			byte[] coverArt = CoverArtThread.imageByte;
 			
 			progressBar.setVisible(true);
 			
@@ -78,17 +84,17 @@ public class DownloadThread extends Thread{
 			// insert metadata
 			ID3v2 id3v2Tag = new ID3v23Tag();
 			mp3file.setId3v2Tag(id3v2Tag);
-			id3v2Tag.setArtist(FXController.bandArtist);
-			id3v2Tag.setTitle(FXController.songTitle);
+			id3v2Tag.setArtist(bandArtist);
+			id3v2Tag.setTitle(songTitle);
 			if(FXController.albumTitle != "") 
-				id3v2Tag.setAlbum(FXController.albumTitle);
-			id3v2Tag.setYear(FXController.albumYear);
+				id3v2Tag.setAlbum(albumTitle);
+			id3v2Tag.setYear(albumYear);
 			try {
-			id3v2Tag.setGenreDescription(FXController.genre);
+			id3v2Tag.setGenreDescription(genre);
 			} catch(IllegalArgumentException e) {
 				System.out.println("Can't set genre");
 			}
-			id3v2Tag.setAlbumImage(CoverArtThread.imageByte, "image/jpeg");
+			id3v2Tag.setAlbumImage(coverArt, "image/jpeg");
 			
 			mp3file.save(FXController.folderDirectory + songTitle +".mp3");
 
@@ -97,6 +103,7 @@ public class DownloadThread extends Thread{
 			progressBar.setVisible(false);
 			progressBar.setProgress(0);
 			downloading = false;
+
 		} catch (IOException | UnsupportedTagException | InvalidDataException | NotSupportedException e) {
 			e.printStackTrace();
 		}

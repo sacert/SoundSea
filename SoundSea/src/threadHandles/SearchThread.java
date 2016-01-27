@@ -51,6 +51,15 @@ public class SearchThread extends Thread {
 			return;
 		}
 		try {
+			System.out.println(FXController.fileList);
+			if(!FXController.fileList.isEmpty())
+				FXController.fileList.remove(0);
+			
+			if(!FXController.fullTitleList.isEmpty())
+				FXController.fullTitleList.remove(0);
+			
+			System.out.println(FXController.fileList);
+			
 			boolean validSong;
 			image = null;
 			// reset GUI view
@@ -76,6 +85,7 @@ public class SearchThread extends Thread {
 				System.out.println("No itunes info");
 			}
 		
+			System.out.println(FXController.fullTitleList);
 			try {
 				songLabelText.setText(FXController.fullTitleList.get(0));
 				validSong = true;

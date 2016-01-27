@@ -156,15 +156,18 @@ public class Connection {
 	}
 	
 	public static void getSongFromPleer() throws IOException {
-				
-		FXController.bandArtist = FXController.bandArtist.replaceAll("\\bfeat\\b", "");
-		FXController.songTitle = FXController.songTitle.replaceAll("\\bfeat\\b", "");
-		FXController.bandArtist = FXController.bandArtist.replaceAll("\\(.*\\)","");//.replaceAll("[!@#$%^&*(){}:\"<>?]", "");
-		FXController.songTitle = FXController.songTitle.replaceAll("\\(.*\\)","");//.replaceAll("[!@#$%^&*(){}:\"<>?]", "");
-		FXController.bandArtist = deAccent(FXController.bandArtist);
-		FXController.songTitle = deAccent(FXController.songTitle);
+		
+		String bandArtist;
+		String songTitle;
+		
+		bandArtist = FXController.bandArtist.replaceAll("\\bfeat\\b", "");
+		songTitle = FXController.songTitle.replaceAll("\\bfeat\\b", "");
+		bandArtist = FXController.bandArtist.replaceAll("\\(.*\\)","");//.replaceAll("[!@#$%^&*(){}:\"<>?]", "");
+		songTitle = FXController.songTitle.replaceAll("\\(.*\\)","");//.replaceAll("[!@#$%^&*(){}:\"<>?]", "");
+		bandArtist = deAccent(FXController.bandArtist);
+		songTitle = deAccent(FXController.songTitle);
 
-		String fullURLPath = "http://www.pleer.com/browser-extension/search?q=" + FXController.bandArtist.replace(" ", "+").replaceAll("[!@#$%^&*(){}:\"<>?]", "") + "+" +FXController.songTitle.replace(" ", "+").replaceAll("[!@#$%^&*(){}:\"<>?]", "");;
+		String fullURLPath = "http://www.pleer.com/browser-extension/search?limit=100&q=" + bandArtist.replace(" ", "+").replaceAll("[!@#$%^&*(){}:\"<>?]", "") + "+" + songTitle.replace(" ", "+").replaceAll("[!@#$%^&*(){}:\"<>?]", "");
 		
 		System.out.println(fullURLPath);
 		
@@ -185,7 +188,6 @@ public class Connection {
 		List<String> fileList = new ArrayList<String>();
 		List<String> fullTitleList = new ArrayList<String>();
 		
-		FXController.fileList = fileList;
 		Pattern p = Pattern.compile("^[\\x20-\\x7d]*$");
 		
 		for(int i = 0; i < arr.size(); i++) {
@@ -196,27 +198,92 @@ public class Connection {
 			Matcher m4 = Pattern.compile("remix", Pattern.CASE_INSENSITIVE).matcher(rootobj.get("track").toString());
 			Matcher m5 = Pattern.compile("rework", Pattern.CASE_INSENSITIVE).matcher(rootobj.get("track").toString());
 			Matcher m6 = Pattern.compile("cover", Pattern.CASE_INSENSITIVE).matcher(rootobj.get("track").toString());
+			Matcher m7 = Pattern.compile("by", Pattern.CASE_INSENSITIVE).matcher(rootobj.get("track").toString());
+			Matcher m8 = Pattern.compile("rework", Pattern.CASE_INSENSITIVE).matcher(rootobj.get("artist").toString());
+			Matcher m9 = Pattern.compile("remix", Pattern.CASE_INSENSITIVE).matcher(rootobj.get("artist").toString());
+			Matcher m10 = Pattern.compile("rework", Pattern.CASE_INSENSITIVE).matcher(rootobj.get("artist").toString());
+			Matcher m11 = Pattern.compile("cover", Pattern.CASE_INSENSITIVE).matcher(rootobj.get("artist").toString());
+			Matcher m12 = Pattern.compile("by", Pattern.CASE_INSENSITIVE).matcher(rootobj.get("artist").toString());
 			
-			if(m1.find() && m2.find() && !m3.find() && !m4.find() && !m5.find() && !m6.find()) {
-				System.out.println(FXController.qualityLevel.equals("high"));
-				if(FXController.qualityLevel.equals("high")) {
-					if(!(rootobj.get("bitrate").toString().contains("VBR"))) {
-						if(Integer.parseInt(rootobj.get("bitrate").toString().substring(1, 4)) >= 256) {
-							System.out.println(rootobj.get("bitrate").toString());
+			Boolean correctArtist = false;
+			
+			if(rootobj.get("artist").toString().contains(bandArtist))
+				correctArtist = true;
+			
+			//if(rootobj.get("track").toString().contains(FXController.bandArtist))
+				//artistInTrack = true;
+			
+			System.out.println(FXController.bandArtist + rootobj.get("track").toString());
+			
+			// make sure to get only songs that aren't modifications
+			if(m1.find() && m2.find() && !m3.find() && !m4.find() && !m5.find() && !m6.find() && !m7.find() && !m8.find() && !m9.find() && !m10.find() && !m11.find() && !m12.find() && correctArtist) {
+				// searching through either high or low quality songs, depending on the setting that has been set
+				System.out.println(rootobj.get("bitrate").toString());
+				if(rootobj.get("bitrate").toString().contains("VBR") || !(Integer.parseInt(rootobj.get("bitrate").toString().substring(1,2)) >= 4)) {
+					if(FXController.qualityLevel.equals("high")) {
+						if(!(rootobj.get("bitrate").toString().contains("VBR"))) {
+							if( Integer.parseInt(rootobj.get("bitrate").toString().substring(1, 4)) >= 256) {
+								System.out.println("high quality");
+								fileList.add(rootobj.get("file").toString().replace("\"", ""));
+								fullTitleList.add(rootobj.get("artist").toString().replace("\"", "") + " - " + rootobj.get("track").toString().replace("\"", ""));
+							}
+						}
+					} else if (rootobj.get("bitrate").toString().contains("VBR") || Integer.parseInt(rootobj.get("bitrate").toString().substring(1, 4)) < 256){
+						System.out.println("low quality");
+						fileList.add(rootobj.get("file").toString().replace("\"", ""));
+						fullTitleList.add(rootobj.get("artist").toString().replace("\"", "") + " - " + rootobj.get("track").toString().replace("\"", ""));
+					}
+				}
+			}
+		}
+		
+		if(fileList.isEmpty() || fullTitleList.isEmpty()) {
+			for(int i = 0; i < arr.size(); i++) {
+				rootobj = arr.get(i).getAsJsonObject();
+				Matcher m1 = p.matcher(rootobj.get("artist").toString().replace("\"", "").replace("[", "~").replace("]", "~"));
+				Matcher m2 = p.matcher(rootobj.get("track").toString().replace("\"", "").replace("[", "~").replace("]", "~"));
+				Matcher m3 = Pattern.compile("rework", Pattern.CASE_INSENSITIVE).matcher(rootobj.get("track").toString());
+				Matcher m4 = Pattern.compile("remix", Pattern.CASE_INSENSITIVE).matcher(rootobj.get("track").toString());
+				Matcher m5 = Pattern.compile("rework", Pattern.CASE_INSENSITIVE).matcher(rootobj.get("track").toString());
+				Matcher m6 = Pattern.compile("cover", Pattern.CASE_INSENSITIVE).matcher(rootobj.get("track").toString());
+				Matcher m7 = Pattern.compile("by", Pattern.CASE_INSENSITIVE).matcher(rootobj.get("track").toString());
+				Matcher m8 = Pattern.compile("rework", Pattern.CASE_INSENSITIVE).matcher(rootobj.get("artist").toString());
+				Matcher m9 = Pattern.compile("remix", Pattern.CASE_INSENSITIVE).matcher(rootobj.get("artist").toString());
+				Matcher m10 = Pattern.compile("rework", Pattern.CASE_INSENSITIVE).matcher(rootobj.get("artist").toString());
+				Matcher m11 = Pattern.compile("cover", Pattern.CASE_INSENSITIVE).matcher(rootobj.get("artist").toString());
+				Matcher m12 = Pattern.compile("by", Pattern.CASE_INSENSITIVE).matcher(rootobj.get("artist").toString());
+				
+				Boolean artistInTrack = false;
+				
+				if(rootobj.get("track").toString().contains(bandArtist))
+					artistInTrack = true;
+				
+				// make sure to get only songs that aren't modifications
+				if(m1.find() && m2.find() && !m3.find() && !m4.find() && !m5.find() && !m6.find() && !m7.find() && !m8.find() && !m9.find() && !m10.find() && !m11.find() && !m12.find() && !artistInTrack) {
+					// if nothing has been found for that search quality, flip to grabbing the inverse
+					if(!(Integer.parseInt(rootobj.get("bitrate").toString().substring(1,2)) >= 4)) {
+						if(!FXController.qualityLevel.equals("high")) {
+							if(!(rootobj.get("bitrate").toString().contains("VBR"))) {
+								if(Integer.parseInt(rootobj.get("bitrate").toString().substring(1, 4)) >= 256) {
+									fileList.add(rootobj.get("file").toString().replace("\"", ""));
+									fullTitleList.add(rootobj.get("artist").toString().replace("\"", "") + " - " + rootobj.get("track").toString().replace("\"", ""));
+								}
+							}
+						} else if (rootobj.get("bitrate").toString().contains("VBR") || Integer.parseInt(rootobj.get("bitrate").toString().substring(1, 4)) < 256){
 							fileList.add(rootobj.get("file").toString().replace("\"", ""));
 							fullTitleList.add(rootobj.get("artist").toString().replace("\"", "") + " - " + rootobj.get("track").toString().replace("\"", ""));
 						}
 					}
 				}
-				else if (rootobj.get("bitrate").toString().contains("VBR") || Integer.parseInt(rootobj.get("bitrate").toString().substring(1, 4)) < 256){
-					System.out.println(rootobj.get("bitrate").toString());
-					fileList.add(rootobj.get("file").toString().replace("\"", ""));
-					fullTitleList.add(rootobj.get("artist").toString().replace("\"", "") + " - " + rootobj.get("track").toString().replace("\"", ""));
-				}
+				
 			}
 		}
 		
-		FXController.fullTitleList = fullTitleList;
+		//FXController.bandArtist = 
+		//FXController.songTitle = FXController.songTitle.replaceAll("\\bfeat\\b", "");
+		FXController.fileList.add(fileList.get(0));
+		FXController.fullTitleList.add(FXController.bandArtist + " - " + FXController.songTitle);
+		//FXController.fullTitleList.add(fullTitleList.get(0));
 	}
 
 	public static void getiTunesSongInfo(String songInfoQuery) throws IOException {
