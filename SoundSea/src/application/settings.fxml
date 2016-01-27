@@ -43,5 +43,6 @@
       <Text fill="#787878" layoutX="22.0" layoutY="107.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Filter By" />
       <RadioButton fx:id="lowQualityRadio" layoutX="23.0" layoutY="113.0" mnemonicParsing="false" onAction="#onToggleHandle" text="Low Quality" textFill="#787878" />
       <RadioButton fx:id="highQualityRadio" layoutX="148.0" layoutY="113.0" mnemonicParsing="false" onAction="#onToggleHandle" text="High Quality" textFill="#787878" />
+      <RadioButton fx:id="VBRQualityRadio" layoutX="276.0" layoutY="113.0" mnemonicParsing="false" onAction="#onToggleHandle" text="Variable Bit Length" textFill="#787878" />
    </children>
 </Pane>
