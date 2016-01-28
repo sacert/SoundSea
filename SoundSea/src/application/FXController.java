@@ -1,5 +1,6 @@
 package application;
 
+import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -8,10 +9,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import javax.imageio.ImageIO;
+
 import jaco.mp3.player.MP3Player;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -28,6 +32,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.KeyCode;
@@ -246,6 +251,15 @@ public class FXController implements Initializable {
 		songLabelText.setEditable(false);
 		rightSearch.setVisible(false);
 		leftSearch.setVisible(false);
+		
+		BufferedImage image = null;
+		try {
+			image = ImageIO.read(getClass().getClassLoader().getResource("resources/placeholder.png"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		Image test = SwingFXUtils.toFXImage(image, null);
+		albumArt.setImage(test);
 		
 		getSearchField.setOnKeyPressed(new EventHandler<KeyEvent>()
 	    {
