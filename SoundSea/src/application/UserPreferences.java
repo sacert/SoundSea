@@ -9,11 +9,9 @@ public class UserPreferences {
 	static String osName = System.getProperty("os.name");
 	
 	static void getPreferences() throws BackingStoreException {
-		 
-
          String[] keys = userPrefs.keys();
          if (keys == null || keys.length == 0) {
-
+ 
         	 userPrefs.put("qualityLevel", "high");
         	 if(osName.contains("Windows")) 
         		 userPrefs.put("folderDirectory", System.getProperty("user.home") + "\\Music\\");
