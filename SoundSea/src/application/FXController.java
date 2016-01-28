@@ -60,6 +60,8 @@ public class FXController implements Initializable {
 	@FXML private Pane songLabelPane;
 	@FXML private Button playButton;
 	@FXML private Button pauseButton;
+	@FXML private Button rightSearch;
+	@FXML private Button leftSearch;
 	
 	public static String songFullTitle = "";
 	public static String songTitle = "";
@@ -75,6 +77,7 @@ public class FXController implements Initializable {
 	public static List<String> imageURLs = new ArrayList<String>();
 	public static List<String> fileList = new ArrayList<String>();
 	public static List<String> fullTitleList = new ArrayList<String>();
+	public static List<String> qualityList = new ArrayList<String>();
 	
 	public static int imageIndex = 0;
 	public static WritableImage greyImage;
@@ -88,14 +91,14 @@ public class FXController implements Initializable {
 	@FXML
 	private void handleQuickDownloadAction(ActionEvent event) throws IOException, InterruptedException  {
 		
-		threadHandles.SearchThread st = new threadHandles.SearchThread(getSearchField, songLabelText, albumArt, loadingImage, true, progressBar, playButton, pauseButton);
+		threadHandles.SearchThread st = new threadHandles.SearchThread(getSearchField, songLabelText, albumArt, loadingImage, true, progressBar, playButton, pauseButton, leftSearch, rightSearch);
 		st.start();
 	}
 	
 	@FXML
 	private void handleSearchAction(ActionEvent event) throws IOException, InterruptedException  {
 		
-		threadHandles.SearchThread st = new threadHandles.SearchThread(getSearchField, songLabelText, albumArt, loadingImage, false, progressBar, playButton, pauseButton);
+		threadHandles.SearchThread st = new threadHandles.SearchThread(getSearchField, songLabelText, albumArt, loadingImage, false, progressBar, playButton, pauseButton, leftSearch, rightSearch);
 		st.start();
 	}
 	
@@ -173,8 +176,7 @@ public class FXController implements Initializable {
 		}
 		System.out.println(fileCounter);
 		
-		songLabelText.setText(fullTitleList.get(fileCounter));
-
+		songLabelText.setText("[" + qualityList.get(fileCounter) + "] "+ fullTitleList.get(fileCounter));
 	}
 	
 	@FXML
@@ -186,7 +188,8 @@ public class FXController implements Initializable {
 		}
 		System.out.println(fileCounter);
 		
-		songLabelText.setText(fullTitleList.get(fileCounter));
+		songLabelText.setText("[" + qualityList.get(fileCounter) + "] "+ fullTitleList.get(fileCounter));
+
 	}
 	
 	@FXML
@@ -241,6 +244,8 @@ public class FXController implements Initializable {
 		playButton.setVisible(false);
 		pauseButton.setVisible(false);
 		songLabelText.setEditable(false);
+		rightSearch.setVisible(false);
+		leftSearch.setVisible(false);
 		
 		getSearchField.setOnKeyPressed(new EventHandler<KeyEvent>()
 	    {
@@ -249,7 +254,7 @@ public class FXController implements Initializable {
 	        {
 	            if (ke.getCode().equals(KeyCode.ENTER))
 	            {
-	            	threadHandles.SearchThread st = new threadHandles.SearchThread(getSearchField, songLabelText, albumArt, loadingImage, false, progressBar, playButton, pauseButton);
+	            	threadHandles.SearchThread st = new threadHandles.SearchThread(getSearchField, songLabelText, albumArt, loadingImage, false, progressBar, playButton, pauseButton, leftSearch, rightSearch);
 	        		st.start();
 	            }
 	        }

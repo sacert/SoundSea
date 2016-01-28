@@ -17,6 +17,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.text.Text;
 import javazoom.jl.decoder.JavaLayerException;
 import javazoom.jl.player.Player;
 import application.FXController;
@@ -34,8 +35,10 @@ public class SearchThread extends Thread {
 	private ProgressBar progressBar;
 	private Button playButton;
 	private Button pauseButton;
+	private Button leftSearch;
+	private Button rightSearch;
 
-	public SearchThread(TextField getSearchField, TextArea songLabelText, ImageView albumArt, ImageView loadingImage, boolean quickDownload, ProgressBar progressBar, Button playButton, Button pauseButton) {
+	public SearchThread(TextField getSearchField, TextArea songLabelText, ImageView albumArt, ImageView loadingImage, boolean quickDownload, ProgressBar progressBar, Button playButton, Button pauseButton, Button leftSearch, Button rightSearch) {
 		this.getSearchField = getSearchField;
 		this.songLabelText = songLabelText;
 		this.albumArt = albumArt;
@@ -44,6 +47,8 @@ public class SearchThread extends Thread {
 		this.progressBar = progressBar;
 		this.playButton = playButton;
 		this.pauseButton = pauseButton;
+		this.leftSearch = leftSearch;
+		this.rightSearch = rightSearch;
 	}
 	
 	public void run() {
@@ -87,7 +92,7 @@ public class SearchThread extends Thread {
 		
 			System.out.println(FXController.fullTitleList);
 			try {
-				songLabelText.setText(FXController.fullTitleList.get(0));
+				songLabelText.setText("[" + FXController.qualityList.get(0) + "] "+ FXController.fullTitleList.get(0));
 				validSong = true;
 			} catch(IndexOutOfBoundsException e)  {
 				songLabelText.setText("Song not found");
@@ -109,6 +114,8 @@ public class SearchThread extends Thread {
 				loadingImage.setVisible(false);
 				albumArt.setImage(image);
 				playButton.setVisible(true);
+				rightSearch.setVisible(true);
+				leftSearch.setVisible(true);
 				
 				if(FXController.songPlaying == true) {
 					FXController.songPlaying = false;
@@ -120,6 +127,8 @@ public class SearchThread extends Thread {
 				Image test = SwingFXUtils.toFXImage(image, null);
 				albumArt.setImage(test);
 				loadingImage.setVisible(false);
+				rightSearch.setVisible(false);
+				leftSearch.setVisible(false);
 			}
 		} catch (IOException | InterruptedException e) {
 			loadingImage.setVisible(false);

@@ -189,6 +189,7 @@ public class Connection {
 		
 		List<String> fileList = new ArrayList<String>();
 		List<String> fullTitleList = new ArrayList<String>();
+		List<String> qualityList = new ArrayList<String>();
 		
 		Pattern p = Pattern.compile("^[\\x20-\\x7d]*$");
 		
@@ -226,18 +227,21 @@ public class Connection {
 							System.out.println("high");
 							fileList.add(rootobj.get("file").toString().replace("\"", ""));
 							fullTitleList.add(rootobj.get("artist").toString().replace("\"", "") + " - " + rootobj.get("track").toString().replace("\"", ""));
+							qualityList.add("High");
 						}
 					} else if (FXController.qualityLevel.equals("low")) {
 						if (!rootobj.get("bitrate").toString().contains("VBR") && Integer.parseInt(rootobj.get("bitrate").toString().substring(1, 4)) < 256){
 							System.out.println("low");
 							fileList.add(rootobj.get("file").toString().replace("\"", ""));
 							fullTitleList.add(rootobj.get("artist").toString().replace("\"", "") + " - " + rootobj.get("track").toString().replace("\"", ""));
+							qualityList.add("Low");
 						}
 					} else if (FXController.qualityLevel.equals("VBR")) { 
 						if (rootobj.get("bitrate").toString().contains("VBR")){
 							System.out.println("VBR");
 							fileList.add(rootobj.get("file").toString().replace("\"", ""));
 							fullTitleList.add(rootobj.get("artist").toString().replace("\"", "") + " - " + rootobj.get("track").toString().replace("\"", ""));
+							qualityList.add("VBR");
 						}
 					}
 				}
@@ -278,12 +282,14 @@ public class Connection {
 							System.out.println("high");
 							fileList.add(rootobj.get("file").toString().replace("\"", ""));
 							fullTitleList.add(rootobj.get("artist").toString().replace("\"", "") + " - " + rootobj.get("track").toString().replace("\"", ""));
+							qualityList.add("High");
 						}
 					} else if (FXController.qualityLevel.equals("high")) {
 						if (!rootobj.get("bitrate").toString().contains("VBR") && Integer.parseInt(rootobj.get("bitrate").toString().substring(1, 4)) < 256){
 							System.out.println("low");
 							fileList.add(rootobj.get("file").toString().replace("\"", ""));
 							fullTitleList.add(rootobj.get("artist").toString().replace("\"", "") + " - " + rootobj.get("track").toString().replace("\"", ""));
+							qualityList.add("Low");
 						}
 					}
 				}
@@ -324,12 +330,14 @@ public class Connection {
 							System.out.println("low");
 							fileList.add(rootobj.get("file").toString().replace("\"", ""));
 							fullTitleList.add(rootobj.get("artist").toString().replace("\"", "") + " - " + rootobj.get("track").toString().replace("\"", ""));
+							qualityList.add("Low");
 						}
 					} else if (FXController.qualityLevel.equals("low") || FXController.qualityLevel.equals("high")) { 
 						if (rootobj.get("bitrate").toString().contains("VBR")){
 							System.out.println("VBR");
 							fileList.add(rootobj.get("file").toString().replace("\"", ""));
 							fullTitleList.add(rootobj.get("artist").toString().replace("\"", "") + " - " + rootobj.get("track").toString().replace("\"", ""));
+							qualityList.add("VBR");
 						}
 					}
 				}
@@ -342,6 +350,7 @@ public class Connection {
 		FXController.fileList = (fileList);
 		//FXController.fullTitleList.add(FXController.bandArtist + " - " + FXController.songTitle);
 		FXController.fullTitleList = (fullTitleList);
+		FXController.qualityList = qualityList;
 		
 		System.out.println(fullTitleList);
 	}
