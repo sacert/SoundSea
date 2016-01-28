@@ -74,6 +74,8 @@ public class SearchThread extends Thread {
 			if(songLabelText.toString() != "") 
 				songLabelText.setText("");
 			loadingImage.setVisible(true);
+			rightSearch.setVisible(false);
+			leftSearch.setVisible(false);
 			
 			// parse itunes info for song
 			String songInfoQuery = getSearchField.getText();
@@ -109,6 +111,8 @@ public class SearchThread extends Thread {
 					System.out.println("grabbing");
 					//spin
 				}
+				
+				FXController.fileCounter = 0;
 				
 				albumArt.setImage(null);
 				loadingImage.setVisible(false);

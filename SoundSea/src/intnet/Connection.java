@@ -160,16 +160,23 @@ public class Connection {
 		String bandArtist;
 		String songTitle;
 		
-		// delete everything after feat
-		
-		bandArtist = FXController.bandArtist.replaceAll("\\bfeat\\b", "");
-		songTitle = FXController.songTitle.replaceAll("\\bfeat\\b", "");
+		// these top two dont do anyhting
 		bandArtist = FXController.bandArtist.replaceAll("\\(.*\\)","");//.replaceAll("[!@#$%^&*(){}:\"<>?]", "");
 		songTitle = FXController.songTitle.replaceAll("\\(.*\\)","");//.replaceAll("[!@#$%^&*(){}:\"<>?]", "");
 		bandArtist = deAccent(FXController.bandArtist);
 		songTitle = deAccent(FXController.songTitle);
 
-		String fullURLPath = "http://www.pleer.com/browser-extension/search?limit=100&q=" + bandArtist.replace(" ", "+").replaceAll("[!@#$%^&*(){}:\"<>?]", "") + "+" + songTitle.replace(" ", "+").replaceAll("[!@#$%^&*(){}:\"<>?]", "");
+		if(FXController.bandArtist.contains("feat"))
+			bandArtist = FXController.bandArtist.split("feat")[0];
+		if(FXController.songTitle.contains("feat"))
+			songTitle = FXController.songTitle.split("feat")[0];
+		if(FXController.bandArtist.contains("Feat"))
+			bandArtist = FXController.bandArtist.split("feat")[0];
+		if(FXController.songTitle.contains("Feat"))
+			songTitle = FXController.songTitle.split("feat")[0];
+		
+
+		String fullURLPath = "http://www.pleer.com/browser-extension/search?limit=100&q=" + bandArtist.replace(" ", "+").replaceAll("[!@#$%^&*(){}:\"<>?]", "") + "+" + songTitle.replace(" ", "+").replaceAll("[!@#$%^&*(){}:\"<>?]", "").replaceAll("\\[.*\\]", "");
 		
 		System.out.println(fullURLPath);
 		
@@ -201,25 +208,30 @@ public class Connection {
 			Matcher m4 = Pattern.compile("remix", Pattern.CASE_INSENSITIVE).matcher(rootobj.get("track").toString());
 			Matcher m5 = Pattern.compile("rework", Pattern.CASE_INSENSITIVE).matcher(rootobj.get("track").toString());
 			Matcher m6 = Pattern.compile("cover", Pattern.CASE_INSENSITIVE).matcher(rootobj.get("track").toString());
-			Matcher m7 = Pattern.compile("by", Pattern.CASE_INSENSITIVE).matcher(rootobj.get("track").toString());
 			Matcher m8 = Pattern.compile("rework", Pattern.CASE_INSENSITIVE).matcher(rootobj.get("artist").toString());
 			Matcher m9 = Pattern.compile("remix", Pattern.CASE_INSENSITIVE).matcher(rootobj.get("artist").toString());
 			Matcher m10 = Pattern.compile("rework", Pattern.CASE_INSENSITIVE).matcher(rootobj.get("artist").toString());
 			Matcher m11 = Pattern.compile("cover", Pattern.CASE_INSENSITIVE).matcher(rootobj.get("artist").toString());
-			Matcher m12 = Pattern.compile("by", Pattern.CASE_INSENSITIVE).matcher(rootobj.get("artist").toString());
+			Matcher m13 = Pattern.compile("mix", Pattern.CASE_INSENSITIVE).matcher(rootobj.get("track").toString());
 			
 			Boolean correctArtist = false;
+			Boolean artistInTrack = false;
 			
-			if(rootobj.get("artist").toString().contains(bandArtist))
+			//System.out.println(rootobj.get("artist").toString().toLowerCase() + " " + bandArtist.toLowerCase());
+			//System.out.println(rootobj.get("track").toString().toLowerCase() + " " + songTitle.toLowerCase());
+			System.out.println(rootobj.get("track").toString().toLowerCase().contains(songTitle.toLowerCase().replaceAll("\\[.*\\]", "").replaceAll("\\(.*\\)", "")));
+			System.out.println(rootobj.get("track").toString().toLowerCase() + " " + songTitle.toLowerCase().replaceAll("\\[.*\\]", "").replaceAll("\\(.*\\)", "").replaceAll("  ", " "));
+			
+			if(rootobj.get("artist").toString().toLowerCase().contains(bandArtist.toLowerCase().replaceAll("\\[.*\\]", "").replaceAll("\\(.*\\)", "")))
 				correctArtist = true;
 			
-			//if(rootobj.get("track").toString().contains(FXController.bandArtist))
-				//artistInTrack = true;
+			if(rootobj.get("track").toString().toLowerCase().contains(songTitle.toLowerCase().replaceAll("\\[.*\\]", "").replaceAll("\\(.*\\)", "").replaceAll("  ", " ")))
+				artistInTrack = true;
 			
 //			System.out.println(FXController.bandArtist + rootobj.get("track").toString());
 			
 			// make sure to get only songs that aren't modifications
-			if(m1.find() && m2.find() && !m3.find() && !m4.find() && !m5.find() && !m6.find() && !m7.find() && !m8.find() && !m9.find() && !m10.find() && !m11.find() && !m12.find()) {
+			if(m1.find() && m2.find() && !m3.find() && !m4.find() && !m5.find() && !m6.find() && !m8.find() && !m9.find() && !m10.find() && !m11.find() && !m13.find() && correctArtist && artistInTrack) {
 				// searching through either high or low quality songs, depending on the setting that has been set
 				if(rootobj.get("bitrate").toString().contains("VBR") || !(Integer.parseInt(rootobj.get("bitrate").toString().substring(1,2)) >= 4)) {
 					if(FXController.qualityLevel.equals("high")) {
@@ -256,25 +268,27 @@ public class Connection {
 			Matcher m4 = Pattern.compile("remix", Pattern.CASE_INSENSITIVE).matcher(rootobj.get("track").toString());
 			Matcher m5 = Pattern.compile("rework", Pattern.CASE_INSENSITIVE).matcher(rootobj.get("track").toString());
 			Matcher m6 = Pattern.compile("cover", Pattern.CASE_INSENSITIVE).matcher(rootobj.get("track").toString());
-			Matcher m7 = Pattern.compile("by", Pattern.CASE_INSENSITIVE).matcher(rootobj.get("track").toString());
 			Matcher m8 = Pattern.compile("rework", Pattern.CASE_INSENSITIVE).matcher(rootobj.get("artist").toString());
 			Matcher m9 = Pattern.compile("remix", Pattern.CASE_INSENSITIVE).matcher(rootobj.get("artist").toString());
 			Matcher m10 = Pattern.compile("rework", Pattern.CASE_INSENSITIVE).matcher(rootobj.get("artist").toString());
 			Matcher m11 = Pattern.compile("cover", Pattern.CASE_INSENSITIVE).matcher(rootobj.get("artist").toString());
-			Matcher m12 = Pattern.compile("by", Pattern.CASE_INSENSITIVE).matcher(rootobj.get("artist").toString());
+			Matcher m13 = Pattern.compile("mix", Pattern.CASE_INSENSITIVE).matcher(rootobj.get("track").toString());
+
 			
 			Boolean correctArtist = false;
+			Boolean artistInTrack = false;
 			
-			if(rootobj.get("artist").toString().contains(bandArtist))
+			
+			if(rootobj.get("artist").toString().toLowerCase().contains(bandArtist.toLowerCase().replaceAll("\\[.*\\]", "").replaceAll("\\(.*\\)", "")))
 				correctArtist = true;
 			
-			//if(rootobj.get("track").toString().contains(FXController.bandArtist))
-				//artistInTrack = true;
+			if(rootobj.get("track").toString().toLowerCase().contains(songTitle.toLowerCase().replaceAll("\\[.*\\]", "").replaceAll("\\(.*\\)", "").replaceAll("  ", " ")))
+				artistInTrack = true;
 			
 //			System.out.println(FXController.bandArtist + rootobj.get("track").toString());
 			
 			// make sure to get only songs that aren't modifications
-			if(m1.find() && m2.find() && !m3.find() && !m4.find() && !m5.find() && !m6.find() && !m7.find() && !m8.find() && !m9.find() && !m10.find() && !m11.find() && !m12.find()) {
+			if(m1.find() && m2.find() && !m3.find() && !m4.find() && !m5.find() && !m6.find() && !m8.find() && !m9.find() && !m10.find() && !m11.find() && !m13.find() && correctArtist && artistInTrack) {
 				// searching through either high or low quality songs, depending on the setting that has been set
 				if(rootobj.get("bitrate").toString().contains("VBR") || !(Integer.parseInt(rootobj.get("bitrate").toString().substring(1,2)) >= 4)) {
 					if(FXController.qualityLevel.equals("low") || FXController.qualityLevel.equals("VBR")) {
@@ -304,25 +318,26 @@ public class Connection {
 			Matcher m4 = Pattern.compile("remix", Pattern.CASE_INSENSITIVE).matcher(rootobj.get("track").toString());
 			Matcher m5 = Pattern.compile("rework", Pattern.CASE_INSENSITIVE).matcher(rootobj.get("track").toString());
 			Matcher m6 = Pattern.compile("cover", Pattern.CASE_INSENSITIVE).matcher(rootobj.get("track").toString());
-			Matcher m7 = Pattern.compile("by", Pattern.CASE_INSENSITIVE).matcher(rootobj.get("track").toString());
 			Matcher m8 = Pattern.compile("rework", Pattern.CASE_INSENSITIVE).matcher(rootobj.get("artist").toString());
 			Matcher m9 = Pattern.compile("remix", Pattern.CASE_INSENSITIVE).matcher(rootobj.get("artist").toString());
 			Matcher m10 = Pattern.compile("rework", Pattern.CASE_INSENSITIVE).matcher(rootobj.get("artist").toString());
 			Matcher m11 = Pattern.compile("cover", Pattern.CASE_INSENSITIVE).matcher(rootobj.get("artist").toString());
-			Matcher m12 = Pattern.compile("by", Pattern.CASE_INSENSITIVE).matcher(rootobj.get("artist").toString());
+			Matcher m13 = Pattern.compile("mix", Pattern.CASE_INSENSITIVE).matcher(rootobj.get("track").toString());
+
 			
 			Boolean correctArtist = false;
+			Boolean artistInTrack = false;
 			
-			if(rootobj.get("artist").toString().contains(bandArtist))
+			if(rootobj.get("artist").toString().toLowerCase().contains(bandArtist.toLowerCase().replaceAll("\\[.*\\]", "").replaceAll("\\(.*\\)", "")))
 				correctArtist = true;
 			
-			//if(rootobj.get("track").toString().contains(FXController.bandArtist))
-				//artistInTrack = true;
+			if(rootobj.get("track").toString().toLowerCase().contains(songTitle.toLowerCase().replaceAll("\\[.*\\]", "").replaceAll("\\(.*\\)", "").replaceAll("\\(.*\\)", "").replaceAll("  ", " ")))
+				artistInTrack = true;
 			
 //			System.out.println(FXController.bandArtist + rootobj.get("track").toString());
 			
 			// make sure to get only songs that aren't modifications
-			if(m1.find() && m2.find() && !m3.find() && !m4.find() && !m5.find() && !m6.find() && !m7.find() && !m8.find() && !m9.find() && !m10.find() && !m11.find() && !m12.find()) {
+			if(m1.find() && m2.find() && !m3.find() && !m4.find() && !m5.find() && !m6.find() && !m8.find() && !m9.find() && !m10.find() && !m11.find() && !m13.find() && correctArtist && artistInTrack) {
 				// searching through either high or low quality songs, depending on the setting that has been set
 				if(rootobj.get("bitrate").toString().contains("VBR") || !(Integer.parseInt(rootobj.get("bitrate").toString().substring(1,2)) >= 4)) {
 					if (FXController.qualityLevel.equals("VBR")) {
