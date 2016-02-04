@@ -155,12 +155,11 @@ public class FXController implements Initializable {
 	@FXML
 	private void handlePauseButton(ActionEvent event) throws JavaLayerException {
 		
-		//if(songPlaying) {
-			SongControl.pauseSong();
-			playButton.setVisible(true);
-			pauseButton.setVisible(false);
-			//songPlaying = false;
-		//}
+
+		SongControl.pauseSong();
+		playButton.setVisible(true);
+		pauseButton.setVisible(false);
+
 	}
 	
 	@FXML
@@ -202,14 +201,14 @@ public class FXController implements Initializable {
 			public void run() {
 				
 				try {
-					FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("settings.fxml"));
+					FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/settings/settings.fxml"));
 					Parent root = fxmlLoader.load();
 					Stage stage = new Stage();
 					stage.initModality(Modality.NONE);
 					stage.initStyle(StageStyle.UNDECORATED);
 					
 					Scene scene = new Scene(root,444,159);
-					scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+					scene.getStylesheets().add(getClass().getResource("/application/application.css").toExternalForm());
 					
 					Rectangle rect = new Rectangle(444, 159);
 					rect.setArcHeight(10);

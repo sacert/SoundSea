@@ -18,13 +18,11 @@ import javafx.scene.control.ProgressBar;
 
 public class DownloadThread extends Thread{
 	
-	private String songTitle;
 	private ProgressBar progressBar;
 	public static boolean downloading;
 
 	public DownloadThread(String songTitle, ProgressBar progressBar)
 	{
-		this.songTitle = songTitle;
 		this.progressBar = progressBar;
 	}
 
@@ -32,8 +30,7 @@ public class DownloadThread extends Thread{
 	public void run()
 	{
 		downloading = true;
-		// get system info to store temp folder + files
-		String userName = System.getProperty("user.name");
+		System.getProperty("user.name");
 		String tmpDir = System.getProperty("java.io.tmpdir");
 		
 		File path = new File(tmpDir + "/SongSea");
@@ -90,7 +87,7 @@ public class DownloadThread extends Thread{
 				id3v2Tag.setAlbum(albumTitle);
 			id3v2Tag.setYear(albumYear);
 			try {
-			id3v2Tag.setGenreDescription(genre);
+				id3v2Tag.setGenreDescription(genre);
 			} catch(IllegalArgumentException e) {
 				System.out.println("Can't set genre");
 			}

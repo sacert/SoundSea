@@ -6,7 +6,6 @@ import java.util.prefs.BackingStoreException;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import settings.UserPreferences;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;

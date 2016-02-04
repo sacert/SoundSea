@@ -23,7 +23,6 @@ public class UserPreferences {
          } 
          FXController.folderDirectory = userPrefs.get("folderDirectory", null);
          FXController.qualityLevel = userPrefs.get("qualityLevel", null);
-         System.out.println(FXController.qualityLevel);
 
 	}
 	
