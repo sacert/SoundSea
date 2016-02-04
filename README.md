@@ -22,5 +22,5 @@ Filter through the songs using the `<` and `>` keys once shown.
    - Set directory
    - Change song filter quality
    
-![alt tag](http://imgur.com/VwScckx)
+![settings](http://imgur.com/VwScckx)
    
