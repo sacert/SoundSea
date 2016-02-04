@@ -13,6 +13,7 @@ Allows the user to download songs by entering in a song title which will include
    - Shows a list of songs from the search made
    - Filters through high, low, or VBR bitrates
    - Ability to play songs within the browser
+   - Quick download to quickly download to instantly download the first search result
 
 #####Song List:
 Filter through the songs using the `<` and `>` keys once shown.
@@ -23,4 +24,15 @@ Filter through the songs using the `<` and `>` keys once shown.
    - Change song filter quality
    
 ![settings](http://imgur.com/VwScckx)
+
+#####Play Song:
+   - Hit the play button on the bottom left of the album art
+   - Hit again to pause the song
+   - If changed song from list, pause and start the song again to play the current song in the list
+
+#####Working on:
+   - Cleaning up code - as of right now there are a ton of global variables that I want to remove and lines of code that are called multiple times, it is best to make functions out of them
+   - Bug fixing - need to play around with it more for certain bugs to pop up
+   - Implement a cleaner way to show the list of songs
+   
    
