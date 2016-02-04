@@ -1,14 +1,16 @@
-package application;
+package settings;
 
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
+
+import application.FXController;
 
 public class UserPreferences {
 	
 	static Preferences userPrefs = Preferences.userNodeForPackage(UserPreferences.class);
 	static String osName = System.getProperty("os.name");
 	
-	static void getPreferences() throws BackingStoreException {
+	public static void getPreferences() throws BackingStoreException {
          String[] keys = userPrefs.keys();
          if (keys == null || keys.length == 0) {
  

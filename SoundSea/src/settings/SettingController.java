@@ -1,9 +1,10 @@
-package application;
+package settings;
 
 import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import application.FXController;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;

@@ -6,6 +6,7 @@ import java.util.prefs.BackingStoreException;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import settings.UserPreferences;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
@@ -56,7 +57,7 @@ public class Main extends Application {
 	}
 	public static void main(String[] args) throws IOException, InterruptedException, BackingStoreException {
 		
-		UserPreferences.getPreferences();
+		settings.UserPreferences.getPreferences();
 		launch(args);
 		
 	}

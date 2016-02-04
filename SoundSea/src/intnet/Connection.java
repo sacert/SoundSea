@@ -37,7 +37,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import application.FXController;
-import application.SettingController;
+import settings.SettingController;
 
 public class Connection {
 	
