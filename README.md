@@ -23,7 +23,7 @@ Filter through the songs using the `<` and `>` keys once shown.
    - Set directory
    - Change song filter quality
    
-![settings](https://raw.github.com/sacert/SoundSea/master/SettingsWindow.png)
+![settings](https://raw.github.com/sacert/SoundSea/master/SettingsWindow.png = 400x171)
 
 #####Play Song:
    - Hit the play button on the bottom left of the album art
