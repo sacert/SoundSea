@@ -1,8 +1,10 @@
-# Sound Sea
+# Sound Sea - FIXED
 
 Allows the user to download songs by entering in a song title which will include a variety of metadata as well as album cover.
 
 ![alt tag](https://raw.github.com/sacert/SoundSea/master/SoundSeaDemo.gif)
+
+Note: If your song isn't being properly searching, try adding song **title** and **artist**. To strengthen search further, add **album name**.
 
 #####How it works:
    - Uses the itunes search to grab the song the user has requested
@@ -33,6 +35,6 @@ Filter through the songs using the `<` and `>` keys once shown.
 #####Working on:
    - Cleaning up code - as of right now there are a ton of global variables that I want to remove and lines of code that are called multiple times, it is best to make functions out of them
    - Bug fixing - need to play around with it more for certain bugs to pop up
-   - Implement a cleaner way to show the list of songs
+   - Tighten the searching algorithm
    
    
