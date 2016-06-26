@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
+import java.net.URLConnection;
 
 import com.mpatric.mp3agic.ID3v2;
 import com.mpatric.mp3agic.ID3v23Tag;
@@ -55,11 +56,20 @@ public class DownloadThread extends Thread{
 			
 			long time1 = System.currentTimeMillis();
 			// download file
-			URL url = new URL(FXController.fileList.get(FXController.fileCounter));
-			int size = url.openConnection().getContentLength();
+			URL url = new URL("http://pleer.com/browser-extension/files/" + FXController.fileList.get(FXController.fileCounter) + ".mp3");
+			
+			URLConnection urlConnection = url.openConnection();
+			urlConnection.addRequestProperty("User-Agent", "Mozilla/5.0 (Windows; U; Windows NT 6.1; en-GB;     rv:1.9.2.13) Gecko/20101203 Firefox/3.6.13 (.NET CLR 3.5.30729)");
+			urlConnection.connect();
+			
+			
+			int size = urlConnection.getContentLength();
 			//FileUtils.copyURLToFile(url, file);
 			
-			BufferedInputStream in = new BufferedInputStream(url.openStream());
+			System.out.println(size);
+
+
+			BufferedInputStream in = new BufferedInputStream(urlConnection.getInputStream());
 			FileOutputStream fout = new FileOutputStream(tmpDir + "/SongSea/temp.mp3");
 			byte data[] = new byte[1024];
 			int count;
