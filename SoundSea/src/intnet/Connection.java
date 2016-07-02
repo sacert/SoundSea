@@ -6,7 +6,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLConnection;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.text.Normalizer;
@@ -14,21 +13,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.nodes.Node;
-import org.jsoup.nodes.TextNode;
-import org.jsoup.select.Elements;
-
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-
 import application.FXController;
 import javafx.scene.control.TextArea;
 
@@ -58,7 +46,7 @@ public class Connection {
 		String fullURLPath = "http://www.pleer.com/browser-extension/search?limit=100&q=" + bandArtist.replace(" ", "+").replaceAll("[!@#$%^&*(){}:\"<>?]", "") + "+" + songTitle.replace(" ", "+").replaceAll("[!@#$%^&*(){}:\"<>?]", "").replaceAll("\\[.*\\]", "");
 		
 		
-		URL url = new URL(fullURLPath);
+		final URL url = new URL(fullURLPath);
 		HttpURLConnection request = (HttpURLConnection) url.openConnection();
 		request.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows; U; Windows NT 6.1; en-GB;     rv:1.9.2.13) Gecko/20101203 Firefox/3.6.13 (.NET CLR 3.5.30729)");
 		request.connect();
@@ -73,9 +61,9 @@ public class Connection {
 			songLabelText.setText("Song not found");
 		}
 		
-		List<String> fileList = new ArrayList<String>();
-		List<String> fullTitleList = new ArrayList<String>();
-		List<String> qualityList = new ArrayList<String>();
+		List<String> fileList = new ArrayList<>();
+		List<String> fullTitleList = new ArrayList<>();
+		List<String> qualityList = new ArrayList<>();
 		
 		Pattern p = Pattern.compile("^[\\x20-\\x7d]*$");
 		
@@ -107,28 +95,34 @@ public class Connection {
 			if(m1.find() && m2.find() && !m3.find() && !m4.find() && !m5.find() && !m6.find() && !m8.find() && !m9.find() && !m10.find() && !m11.find() && !m13.find() && correctArtist && artistInTrack) {
 				// searching through either high or low quality songs, depending on the setting that has been set
 				if((rootobj.get("bitrate").toString().contains("VBR") || !(Integer.parseInt(rootobj.get("bitrate").toString().substring(1,2)) >= 4)) && !rootobj.get("bitrate").toString().substring(1, 4).contains(" ")) {
-					if(FXController.qualityLevel.equals("high")) {
-						if(!rootobj.get("bitrate").toString().contains("VBR") && Integer.parseInt(rootobj.get("bitrate").toString().substring(1, 4)) >= 256) {
-							System.out.println("high");
-							fileList.add(rootobj.get("id").toString().replace("\"", ""));
-							fullTitleList.add(rootobj.get("artist").toString().replace("\"", "") + " - " + rootobj.get("track").toString().replace("\"", ""));
-							qualityList.add("High");
-						}
-					} else if (FXController.qualityLevel.equals("low")) {
-						if (!rootobj.get("bitrate").toString().contains("VBR") && Integer.parseInt(rootobj.get("bitrate").toString().substring(1, 4)) < 256){
-							System.out.println("low");
-							fileList.add(rootobj.get("id").toString().replace("\"", ""));
-							fullTitleList.add(rootobj.get("artist").toString().replace("\"", "") + " - " + rootobj.get("track").toString().replace("\"", ""));
-							qualityList.add("Low");
-						}
-					} else if (FXController.qualityLevel.equals("VBR")) { 
-						if (rootobj.get("bitrate").toString().contains("VBR")){
-							System.out.println("VBR");
-							fileList.add(rootobj.get("id").toString().replace("\"", ""));
-							fullTitleList.add(rootobj.get("artist").toString().replace("\"", "") + " - " + rootobj.get("track").toString().replace("\"", ""));
-							qualityList.add("VBR");
-						}
-					}
+                                    switch (FXController.qualityLevel) {
+                                        case "high":
+                                            if(!rootobj.get("bitrate").toString().contains("VBR") && Integer.parseInt(rootobj.get("bitrate").toString().substring(1, 4)) >= 256) {
+                                                System.out.println("high");
+                                                fileList.add(rootobj.get("id").toString().replace("\"", ""));
+                                                fullTitleList.add(rootobj.get("artist").toString().replace("\"", "") + " - " + rootobj.get("track").toString().replace("\"", ""));
+                                                qualityList.add("High");
+                                            }
+                                            break;
+                                        case "low":
+                                            if (!rootobj.get("bitrate").toString().contains("VBR") && Integer.parseInt(rootobj.get("bitrate").toString().substring(1, 4)) < 256){
+                                                System.out.println("low");
+                                                fileList.add(rootobj.get("id").toString().replace("\"", ""));
+                                                fullTitleList.add(rootobj.get("artist").toString().replace("\"", "") + " - " + rootobj.get("track").toString().replace("\"", ""));
+                                                qualityList.add("Low");
+                                            }
+                                            break;
+                                        case "VBR":
+                                            if (rootobj.get("bitrate").toString().contains("VBR")){
+                                                System.out.println("VBR");
+                                                fileList.add(rootobj.get("id").toString().replace("\"", ""));
+                                                fullTitleList.add(rootobj.get("artist").toString().replace("\"", "") + " - " + rootobj.get("track").toString().replace("\"", ""));
+                                                qualityList.add("VBR");
+                                            }
+                                            break;
+                                        default:
+                                            break;
+                                    }
 				}
 			}
 		}
@@ -292,20 +286,16 @@ public class Connection {
 		title = title.toLowerCase();
 		title = toTitleCase(title);
 		
-		title = title.replace("Lyrics", "");
-		title = title.replace("  ", " ");
-		
-		return title;
+		return title.replace("Lyrics", "").replace("  ", " ");
 	}
 	
 	private static String toTitleCase(String givenString) {
 	    String[] arr = givenString.split(" ");
 	    StringBuffer sb = new StringBuffer();
 
-	    for (int i = 0; i < arr.length; i++) {
-	        sb.append(Character.toUpperCase(arr[i].charAt(0)))
-	            .append(arr[i].substring(1)).append(" ");
-	    }          
+            for (String str : arr) {
+                sb.append(Character.toUpperCase(str.charAt(0))).append(str.substring(1)).append(" ");
+            }          
 	    return sb.toString().trim();
 	}  
 	
