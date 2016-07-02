@@ -58,7 +58,7 @@ public class SearchThread extends Thread {
 			playButton.setVisible(false);
 			pauseButton.setVisible(false);
 			albumArt.setImage(FXController.greyImage);
-			if(songLabelText.toString() != "") 
+			if(!"".equals(songLabelText.toString())) 
 				songLabelText.setText("");
 			loadingImage.setVisible(true);
 			rightSearch.setVisible(false);
