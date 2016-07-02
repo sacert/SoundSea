@@ -41,6 +41,7 @@ public class SearchThread extends Thread {
 		this.rightSearch = rightSearch;
 	}
 	
+        @Override
 	public void run() {
 		if(getSearchField.getText().isEmpty()) {
 			return;
@@ -112,8 +113,8 @@ public class SearchThread extends Thread {
 				}
 			}
 			else {
-				BufferedImage image = ImageIO.read(getClass().getClassLoader().getResource("resources/placeholder.png"));
-				Image test = SwingFXUtils.toFXImage(image, null);
+				BufferedImage img = ImageIO.read(getClass().getClassLoader().getResource("resources/placeholder.png"));
+				Image test = SwingFXUtils.toFXImage(img, null);
 				albumArt.setImage(test);
 				loadingImage.setVisible(false);
 				rightSearch.setVisible(false);
