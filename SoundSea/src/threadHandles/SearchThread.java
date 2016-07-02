@@ -41,6 +41,7 @@ public class SearchThread extends Thread {
 		this.rightSearch = rightSearch;
 	}
 	
+        @Override
 	public void run() {
 		if(getSearchField.getText().isEmpty()) {
 			return;
@@ -58,7 +59,7 @@ public class SearchThread extends Thread {
 			playButton.setVisible(false);
 			pauseButton.setVisible(false);
 			albumArt.setImage(FXController.greyImage);
-			if(songLabelText.toString() != "") 
+			if(!"".equals(songLabelText.toString())) 
 				songLabelText.setText("");
 			loadingImage.setVisible(true);
 			rightSearch.setVisible(false);
@@ -112,8 +113,8 @@ public class SearchThread extends Thread {
 				}
 			}
 			else {
-				BufferedImage image = ImageIO.read(getClass().getClassLoader().getResource("resources/placeholder.png"));
-				Image test = SwingFXUtils.toFXImage(image, null);
+				BufferedImage img = ImageIO.read(getClass().getClassLoader().getResource("resources/placeholder.png"));
+				Image test = SwingFXUtils.toFXImage(img, null);
 				albumArt.setImage(test);
 				loadingImage.setVisible(false);
 				rightSearch.setVisible(false);
