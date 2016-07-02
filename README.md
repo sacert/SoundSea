@@ -1,4 +1,4 @@
-# Sound Sea - FIXED
+# Sound Sea
 
 Allows the user to download songs by entering in a song title which will include a variety of metadata as well as album cover.
 
@@ -6,8 +6,8 @@ Allows the user to download songs by entering in a song title which will include
 
 Note: If your song isn't being properly searching, try adding song **title** and **artist**. To strengthen search further, add **album name**.
 
-#####How it works:
-   - Uses the itunes search to grab the song the user has requested
+#####How it works? :
+   - It Uses the itunes search to grab the song the user has requested
    - Parse metadata from itunes about that song
    - Use Pleer.com to find and download corresponding song
    
