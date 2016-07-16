@@ -131,7 +131,7 @@
 .progress-bar > .bar {
     -fx-background-color: -fx-box-border, linear-gradient(to bottom, derive(-fx-accent, 95%), derive(-fx-accent,10%)), d8d8d8;
     -fx-background-insets: 1 1 2 1;
-    -fx-padding: 0.20em;
+    -fx-padding: 0.30em;
 }
 
 
@@ -208,13 +208,16 @@
     -fx-background-position: left top, center;
     -fx-background-repeat: no-repeat;
     -fx-background-size: cover, auto;
-}
 
+}
 .pauseButton {
     -fx-background-image: url("../resources/pause.png");
     -fx-background-position: left top, center;
     -fx-background-repeat: no-repeat;
     -fx-background-size: cover, auto;
+}
+.playButton, .pauseButton{
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.4), 4, 0, 0, 2);
 }
 
 .songControl {
