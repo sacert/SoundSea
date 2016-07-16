@@ -3,9 +3,7 @@ package settings;
 import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
-
 import application.FXController;
-import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -21,14 +19,13 @@ import javafx.stage.Stage;
 public class SettingController implements Initializable{
 	
 	@FXML private Button fileChooser;
-	@FXML private Button fileAccept;
 	@FXML private Text directoryText;
 	@FXML private RadioButton highQualityRadio;
 	@FXML private RadioButton lowQualityRadio;
 	@FXML private RadioButton VBRQualityRadio;
 	
 	private File selectedDirectory;
-	private ToggleGroup group = new ToggleGroup();
+	private final ToggleGroup group = new ToggleGroup();
 	
 	@FXML
 	private void handleDirectory(ActionEvent event) {
@@ -60,20 +57,15 @@ public class SettingController implements Initializable{
 	
 	@FXML
 	private void onToggleHandle(ActionEvent event) {
-		group.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
-			public void changed(ObservableValue<? extends Toggle> ov, Toggle t, Toggle t1) {
-				
-				
-				if(group.selectedToggleProperty().toString().contains("High")) {
-					UserPreferences.setQuality("high");
-				} else if (group.selectedToggleProperty().toString().contains("Low")) {
-					UserPreferences.setQuality("low");
-				} else {
-					UserPreferences.setQuality("VBR");
-				}
-				
-			}
-		});
+		group.selectedToggleProperty().addListener((ObservableValue<? extends Toggle> ov, Toggle t, Toggle t1) -> {
+                    if(group.selectedToggleProperty().toString().contains("High")) {
+                        UserPreferences.setQuality("high");
+                    } else if (group.selectedToggleProperty().toString().contains("Low")) {
+                        UserPreferences.setQuality("low");
+                    } else {
+                        UserPreferences.setQuality("VBR");
+                    }
+                });
 	}
 
 	@Override
@@ -84,12 +76,17 @@ public class SettingController implements Initializable{
 		lowQualityRadio.setToggleGroup(group);
 		VBRQualityRadio.setToggleGroup(group);
 		
-		if(FXController.qualityLevel.equals("high"))
-			highQualityRadio.fire();
-		else if(FXController.qualityLevel.equals("low"))
-			lowQualityRadio.fire();
-		else 
-			VBRQualityRadio.fire();
+            switch (FXController.qualityLevel) {
+                case "high":
+                    highQualityRadio.fire();
+                    break;
+                case "low":
+                    lowQualityRadio.fire();
+                    break;
+                default:
+                    VBRQualityRadio.fire();
+                    break;
+            }
 			
 	}
 }
