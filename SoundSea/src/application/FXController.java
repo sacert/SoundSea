@@ -119,7 +119,7 @@ public class FXController implements Initializable {
 
     @FXML
     private void handleCloseAction(ActionEvent event) {
-        System.exit(0);
+        Platform.exit();
     }
 
     @FXML
