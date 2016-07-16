@@ -35,8 +35,8 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javazoom.jl.decoder.JavaLayerException;
-import threadHandles.DownloadThread;
-import threadHandles.SongControl;
+import threadHandles.*;
+
 
 public class FXController implements Initializable {
 
@@ -87,14 +87,14 @@ public class FXController implements Initializable {
     @FXML
     private void handleQuickDownloadAction(ActionEvent event) throws IOException, InterruptedException {
 
-        threadHandles.SearchThread st = new threadHandles.SearchThread(getSearchField, songLabelText, albumArt, loadingImage, true, progressBar, playButton, pauseButton, leftSearch, rightSearch);
+        SearchThread st = new SearchThread(getSearchField, songLabelText, albumArt, loadingImage, true, progressBar, playButton, pauseButton, leftSearch, rightSearch);
         st.start();
     }
 
     @FXML
     private void handleSearchAction(ActionEvent event) throws IOException, InterruptedException {
 
-        threadHandles.SearchThread st = new threadHandles.SearchThread(getSearchField, songLabelText, albumArt, loadingImage, false, progressBar, playButton, pauseButton, leftSearch, rightSearch);
+        SearchThread st = new threadHandles.SearchThread(getSearchField, songLabelText, albumArt, loadingImage, false, progressBar, playButton, pauseButton, leftSearch, rightSearch);
         st.start();
     }
 
@@ -113,13 +113,14 @@ public class FXController implements Initializable {
         if (DownloadThread.downloading) {
             return;
         }
-        threadHandles.DownloadThread dt = new threadHandles.DownloadThread(fullTitleList.get(0), progressBar);
+        DownloadThread dt = new DownloadThread(fullTitleList.get(0), progressBar);
         dt.start();
     }
 
     @FXML
     private void handleCloseAction(ActionEvent event) {
-        Platform.exit();
+//        Platform.exit();
+            System.exit(0);
     }
 
     @FXML
