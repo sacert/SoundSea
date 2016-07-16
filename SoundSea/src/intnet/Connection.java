@@ -6,7 +6,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLConnection;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.text.Normalizer;
@@ -14,21 +13,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.nodes.Node;
-import org.jsoup.nodes.TextNode;
-import org.jsoup.select.Elements;
-
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-
 import application.FXController;
 import javafx.scene.control.TextArea;
 
@@ -73,9 +61,9 @@ public class Connection {
 			songLabelText.setText("Song not found");
 		}
 		
-		List<String> fileList = new ArrayList<String>();
-		List<String> fullTitleList = new ArrayList<String>();
-		List<String> qualityList = new ArrayList<String>();
+		List<String> fileList = new ArrayList<>();
+		List<String> fullTitleList = new ArrayList<>();
+		List<String> qualityList = new ArrayList<>();
 		
 		Pattern p = Pattern.compile("^[\\x20-\\x7d]*$");
 		
@@ -107,28 +95,34 @@ public class Connection {
 			if(m1.find() && m2.find() && !m3.find() && !m4.find() && !m5.find() && !m6.find() && !m8.find() && !m9.find() && !m10.find() && !m11.find() && !m13.find() && correctArtist && artistInTrack) {
 				// searching through either high or low quality songs, depending on the setting that has been set
 				if((rootobj.get("bitrate").toString().contains("VBR") || !(Integer.parseInt(rootobj.get("bitrate").toString().substring(1,2)) >= 4)) && !rootobj.get("bitrate").toString().substring(1, 4).contains(" ")) {
-					if(FXController.qualityLevel.equals("high")) {
-						if(!rootobj.get("bitrate").toString().contains("VBR") && Integer.parseInt(rootobj.get("bitrate").toString().substring(1, 4)) >= 256) {
-							System.out.println("high");
-							fileList.add(rootobj.get("id").toString().replace("\"", ""));
-							fullTitleList.add(rootobj.get("artist").toString().replace("\"", "") + " - " + rootobj.get("track").toString().replace("\"", ""));
-							qualityList.add("High");
-						}
-					} else if (FXController.qualityLevel.equals("low")) {
-						if (!rootobj.get("bitrate").toString().contains("VBR") && Integer.parseInt(rootobj.get("bitrate").toString().substring(1, 4)) < 256){
-							System.out.println("low");
-							fileList.add(rootobj.get("id").toString().replace("\"", ""));
-							fullTitleList.add(rootobj.get("artist").toString().replace("\"", "") + " - " + rootobj.get("track").toString().replace("\"", ""));
-							qualityList.add("Low");
-						}
-					} else if (FXController.qualityLevel.equals("VBR")) { 
-						if (rootobj.get("bitrate").toString().contains("VBR")){
-							System.out.println("VBR");
-							fileList.add(rootobj.get("id").toString().replace("\"", ""));
-							fullTitleList.add(rootobj.get("artist").toString().replace("\"", "") + " - " + rootobj.get("track").toString().replace("\"", ""));
-							qualityList.add("VBR");
-						}
-					}
+                                    switch (FXController.qualityLevel) {
+                                        case "high":
+                                            if(!rootobj.get("bitrate").toString().contains("VBR") && Integer.parseInt(rootobj.get("bitrate").toString().substring(1, 4)) >= 256) {
+                                                System.out.println("high");
+                                                fileList.add(rootobj.get("id").toString().replace("\"", ""));
+                                                fullTitleList.add(rootobj.get("artist").toString().replace("\"", "") + " - " + rootobj.get("track").toString().replace("\"", ""));
+                                                qualityList.add("High");
+                                            }
+                                            break;
+                                        case "low":
+                                            if (!rootobj.get("bitrate").toString().contains("VBR") && Integer.parseInt(rootobj.get("bitrate").toString().substring(1, 4)) < 256){
+                                                System.out.println("low");
+                                                fileList.add(rootobj.get("id").toString().replace("\"", ""));
+                                                fullTitleList.add(rootobj.get("artist").toString().replace("\"", "") + " - " + rootobj.get("track").toString().replace("\"", ""));
+                                                qualityList.add("Low");
+                                            }
+                                            break;
+                                        case "VBR":
+                                            if (rootobj.get("bitrate").toString().contains("VBR")){
+                                                System.out.println("VBR");
+                                                fileList.add(rootobj.get("id").toString().replace("\"", ""));
+                                                fullTitleList.add(rootobj.get("artist").toString().replace("\"", "") + " - " + rootobj.get("track").toString().replace("\"", ""));
+                                                qualityList.add("VBR");
+                                            }
+                                            break;
+                                        default:
+                                            break;
+                                    }
 				}
 			}
 		}
@@ -208,8 +202,8 @@ public class Connection {
 			}
 		}
 		
-		FXController.fileList = (fileList);
-		FXController.fullTitleList = (fullTitleList);
+		FXController.fileList = fileList;
+		FXController.fullTitleList = fullTitleList;
 		FXController.qualityList = qualityList;
 	}
 
@@ -223,10 +217,10 @@ public class Connection {
 		
 		JsonParser jp = new JsonParser();
 		JsonElement root = jp.parse(new InputStreamReader((InputStream) request.getContent(), StandardCharsets.UTF_8));
-		JsonObject rootobj = root.getAsJsonObject();
-		JsonArray arr = rootobj.getAsJsonArray("results");
+		JsonObject rootJsonObj = root.getAsJsonObject();
+		JsonArray arr = rootJsonObj.getAsJsonArray("results");
 		try {
-			rootobj = arr.get(0).getAsJsonObject();
+			rootJsonObj = arr.get(0).getAsJsonObject();
 		} catch (IndexOutOfBoundsException e) {
 			songLabelText.setText("Song not found");
 		}
@@ -235,49 +229,47 @@ public class Connection {
 		String test = "";
 		do {
 			try {
-			rootobj = arr.get(itunesIndex).getAsJsonObject();
+			rootJsonObj = arr.get(itunesIndex).getAsJsonObject();
 			} catch (IndexOutOfBoundsException e) {
 				songLabelText.setText("Song not found");
 			}
-			test = (rootobj.get("kind").toString().replace("\"", ""));
+			test = (rootJsonObj.get("kind").toString().replace("\"", ""));
 			itunesIndex++;
 		} while(!test.equals("song"));
 		
 		itunesIndex--;
 		
 		// parse artist
-		rootobj = arr.get(itunesIndex).getAsJsonObject();
-		FXController.bandArtist = (rootobj.get("artistName").toString().replace("\"", ""));
+		rootJsonObj = arr.get(itunesIndex).getAsJsonObject();
+		FXController.bandArtist = (rootJsonObj.get("artistName").toString().replace("\"", ""));
 
 		// parse song title
-		rootobj = arr.get(itunesIndex).getAsJsonObject();
-		FXController.songTitle = (rootobj.get("trackName").toString().replace("\"", ""));
+		rootJsonObj = arr.get(itunesIndex).getAsJsonObject();
+		FXController.songTitle = (rootJsonObj.get("trackName").toString().replace("\"", ""));
 		
 		// parse album title
-		rootobj = arr.get(itunesIndex).getAsJsonObject();
-		FXController.albumTitle = (rootobj.get("collectionName").toString().replace("\"", ""));
+		rootJsonObj = arr.get(itunesIndex).getAsJsonObject();
+		FXController.albumTitle = (rootJsonObj.get("collectionName").toString().replace("\"", ""));
 		
 		// parse year
-		rootobj = arr.get(itunesIndex).getAsJsonObject();
-		FXController.albumYear = (rootobj.get("releaseDate").toString().replace("\"", "").substring(0, 4));
+		rootJsonObj = arr.get(itunesIndex).getAsJsonObject();
+		FXController.albumYear = (rootJsonObj.get("releaseDate").toString().replace("\"", "").substring(0, 4));
 		
 		// parse genre
-		rootobj = arr.get(itunesIndex).getAsJsonObject();
-		FXController.genre = (rootobj.get("primaryGenreName").toString().replace("\"", ""));
+		rootJsonObj = arr.get(itunesIndex).getAsJsonObject();
+		FXController.genre = (rootJsonObj.get("primaryGenreName").toString().replace("\"", ""));
 		
 		// parse cover art
-		rootobj = arr.get(itunesIndex).getAsJsonObject();
-		FXController.coverArtUrl = (rootobj.get("artworkUrl100").toString().replace("\"", "").replace("100x100bb.jpg", "500x500bb.jpg"));
+		rootJsonObj = arr.get(itunesIndex).getAsJsonObject();
+		FXController.coverArtUrl = (rootJsonObj.get("artworkUrl100").toString().replace("\"", "").replace("100x100bb.jpg", "500x500bb.jpg"));
 		
 		FXController.songFullTitle = FXController.bandArtist + " - " + FXController.songTitle;
 		
 	}
 	
 	private static String fetchIpFromAmazon() throws IOException {
-		URL url = null;
-		url = new URL("http://checkip.amazonaws.com/");
-		BufferedReader br = null;
-		br = new BufferedReader(new InputStreamReader(url.openStream()));
+		URL url = new URL("http://checkip.amazonaws.com/");
+		BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
 		try {
 			return br.readLine();
 		} catch (IOException e) {
@@ -299,13 +291,10 @@ public class Connection {
 	}
 	
 	private static String toTitleCase(String givenString) {
-	    String[] arr = givenString.split(" ");
-	    StringBuffer sb = new StringBuffer();
-
-	    for (int i = 0; i < arr.length; i++) {
-	        sb.append(Character.toUpperCase(arr[i].charAt(0)))
-	            .append(arr[i].substring(1)).append(" ");
-	    }          
+	    StringBuilder sb = new StringBuilder();
+            for (String str : givenString.split(" ")) {
+                sb.append(Character.toUpperCase(str.charAt(0))).append(str.substring(1)).append(" ");
+            }          
 	    return sb.toString().trim();
 	}  
 	
