@@ -16,7 +16,7 @@ public class UserPreferences {
         String[] keys = userPrefs.keys();
         if (keys == null || keys.length == 0) {
             userPrefs.put("qualityLevel", "high");
-            userPrefs.put("folderDirectory", System.getProperty("user.home") + File.separatorChar + "Music");
+            userPrefs.put("folderDirectory", System.getProperty("user.home") + File.separatorChar + "Music" + File.separatorChar);
         }
         FXController.folderDirectory = userPrefs.get("folderDirectory", null);
         FXController.qualityLevel = userPrefs.get("qualityLevel", null);
@@ -27,7 +27,7 @@ public class UserPreferences {
         if (osName.contains("Windows")) {
             userPrefs.put("folderDirectory", dir + "\\");
         } else {
-            userPrefs.put("folderDirectory", dir + "/");
+            userPrefs.put("folderDirectory", dir + File.separatorChar);
         }
 
         FXController.folderDirectory = userPrefs.get("folderDirectory", null);
