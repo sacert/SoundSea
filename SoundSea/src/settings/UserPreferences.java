@@ -23,12 +23,10 @@ public class UserPreferences {
 
     }
 
-    static void setDirectory(String dir) {
-        if (osName.contains("Windows")) {
-            userPrefs.put("folderDirectory", dir + "\\");
-        } else {
-            userPrefs.put("folderDirectory", dir + File.separatorChar);
-        }
+    public static void setDirectory(String dir) {
+        userPrefs.put("folderDirectory", dir + File.separatorChar);
+        FXController.folderDirectory = userPrefs.get("folderDirectory", null);
+    }
 
         FXController.folderDirectory = userPrefs.get("folderDirectory", null);
     }
