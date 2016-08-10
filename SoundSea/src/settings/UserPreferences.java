@@ -28,9 +28,6 @@ public class UserPreferences {
         FXController.folderDirectory = userPrefs.get("folderDirectory", null);
     }
 
-        FXController.folderDirectory = userPrefs.get("folderDirectory", null);
-    }
-
     static void setQuality(String quality) {
 
         userPrefs.put("qualityLevel", quality);
