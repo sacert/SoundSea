@@ -12,6 +12,17 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import application.FXController;
 import intnet.Connection;
+import java.net.UnknownHostException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.application.Platform;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.layout.Pane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 public class SearchThread extends Thread {
 
@@ -79,9 +90,12 @@ public class SearchThread extends Thread {
 
                 // get download link for song
                 Connection.getSongFromPleer(songLabelText);
+
+            } catch (UnknownHostException uhe) {
+                openMessage();
             } catch (NullPointerException e) {
                 songLabelText.setText("Song not found");
-            }
+            } 
 
             try {
                 songLabelText.setText("[" + FXController.qualityList.get(0) + "] " + FXController.fullTitleList.get(0));
@@ -126,6 +140,28 @@ public class SearchThread extends Thread {
             loadingImage.setVisible(false);
             e.printStackTrace();
         }
+
+    }
+
+    private void openMessage() {
+
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/application/Message.fxml"));
+                    System.out.println(loader.getLocation().getPath());
+                    Pane root1 = (Pane) loader.load();
+                    Stage stage = new Stage();
+                    stage.initModality(Modality.APPLICATION_MODAL);
+                    stage.initStyle(StageStyle.UNDECORATED);
+                    stage.setScene(new Scene(root1));
+                    stage.show();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
 
     }
 
