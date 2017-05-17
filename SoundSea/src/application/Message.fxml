@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<Pane maxHeight="143.0" maxWidth="270.0" minHeight="100" minWidth="200" prefHeight="143.0" prefWidth="270.0" styleClass="rootPane" stylesheets="@application.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.MSGController">
+   <children>
+      <ImageView fitHeight="82.0" fitWidth="99.0" layoutX="86.0" layoutY="29.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../resources/no_connection.png" />
+         </image>
+      </ImageView>
+      <Label layoutX="66.0" layoutY="63.0" text="Could not connect to host" />
+      <Button fx:id="btnOk" layoutX="114.0" layoutY="93.0" mnemonicParsing="false" onAction="#closeMessage" prefHeight="25.0" prefWidth="42.0" text="Ok" />
+   </children>
+</Pane>
