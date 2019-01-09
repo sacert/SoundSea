@@ -12,46 +12,53 @@ import javafx.scene.image.Image;
 
 public class CoverArtThread extends Thread {
 
-    public static byte[] imageByte;
+	public static byte[] imageByte;
 
-    @Override
-    public void run() {
-        try {
-            // set cover art album image in window
-            Image image;
+	@Override
+	public void run() {
+		try {
+			// set cover art album image in window
+			Image image;
+			if (FXController.coverArtUrl == "" || FXController.coverArtUrl.isEmpty()) {
+				BufferedImage img = ImageIO.read(getClass().getClassLoader().getResource("resources/placeholder.png"));
+				Image test = SwingFXUtils.toFXImage(img, null);
+				SearchThread.image = test;
+			} else {
 
-            URL coverArtUrl = new URL(FXController.coverArtUrl);
-            BufferedImage img = ImageIO.read(coverArtUrl);
+				URL coverArtUrl = new URL(FXController.coverArtUrl);
+				BufferedImage img = ImageIO.read(coverArtUrl);
 
-            if (img.getHeight() != img.getWidth()) {
-                int newSize;
-                if (img.getHeight() < img.getWidth()) {
-                    newSize = img.getHeight();
-                } else {
-                    newSize = img.getWidth();
-                }
+				if (img.getHeight() != img.getWidth()) {
+					int newSize;
+					if (img.getHeight() < img.getWidth()) {
+						newSize = img.getHeight();
+					} else {
+						newSize = img.getWidth();
+					}
 
-                BufferedImage newImage = new BufferedImage(newSize, newSize, BufferedImage.TYPE_INT_RGB);
+					BufferedImage newImage = new BufferedImage(newSize, newSize, BufferedImage.TYPE_INT_RGB);
 
-                Graphics g = newImage.createGraphics();
-                g.drawImage(img, 0, 0, newSize, newSize, null);
-                g.dispose();
+					Graphics g = newImage.createGraphics();
+					g.drawImage(img, 0, 0, newSize, newSize, null);
+					g.dispose();
 
-                image = SwingFXUtils.toFXImage(newImage, null);
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                ImageIO.write(newImage, "jpeg", baos);
-                imageByte = baos.toByteArray();
+					image = SwingFXUtils.toFXImage(newImage, null);
+					ByteArrayOutputStream baos = new ByteArrayOutputStream();
+					ImageIO.write(newImage, "jpeg", baos);
+					imageByte = baos.toByteArray();
 
-            } else {
-                image = SwingFXUtils.toFXImage(img, null);
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                ImageIO.write(img, "jpeg", baos);
-                imageByte = baos.toByteArray();
-            }
+				} else {
+					image = SwingFXUtils.toFXImage(img, null);
+					ByteArrayOutputStream baos = new ByteArrayOutputStream();
+					ImageIO.write(img, "jpeg", baos);
+					imageByte = baos.toByteArray();
+				}
 
-            SearchThread.image = image;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+				SearchThread.image = image;
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+	}
 }

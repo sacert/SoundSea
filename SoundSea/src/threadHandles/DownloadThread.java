@@ -4,110 +4,182 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
+
 import com.mpatric.mp3agic.ID3v2;
 import com.mpatric.mp3agic.ID3v23Tag;
 import com.mpatric.mp3agic.InvalidDataException;
 import com.mpatric.mp3agic.Mp3File;
 import com.mpatric.mp3agic.NotSupportedException;
 import com.mpatric.mp3agic.UnsupportedTagException;
+
 import application.FXController;
 import javafx.scene.control.ProgressBar;
 
 public class DownloadThread extends Thread {
 
-    private final ProgressBar progressBar;
-    public  static boolean downloading;
+	private final ProgressBar progressBar;
+	public static boolean downloading;
+	private BufferedInputStream in;
+	private int size;
 
-    public DownloadThread(String songTitle, ProgressBar progressBar) {
-        this.progressBar = progressBar;
-    }
+	public DownloadThread(String songTitle, ProgressBar progressBar) {
+		this.progressBar = progressBar;
+	}
 
-    @Override
-    public void run() {
-        downloading = true;
-        System.getProperty("user.name");
-        String tmpDir = System.getProperty("java.io.tmpdir");
+	@SuppressWarnings("static-access")
+	@Override
+	public void run() {
+		downloading = true;
+		System.getProperty("user.name");
+		String tmpDir = System.getProperty("java.io.tmpdir");
 
-        File path = new File(tmpDir + "/SongSea");
+		File path = new File(tmpDir + "/SongSea");
 
-        // if tmp directory exists, delete it
-        if (path.exists() && path.isDirectory()) {
-            new File(tmpDir + "/SongSea").delete();
-        }
+		// if tmp directory exists, delete it
+		if (path.exists() && path.isDirectory()) {
+			new File(tmpDir + "/SongSea").delete();
+		}
 
-        try {
-            String bandArtist = FXController.bandArtist;
-            String songTitle = FXController.songTitle;
-            String albumTitle = FXController.albumTitle;
-            String albumYear = FXController.albumYear;
-            String genre = FXController.genre;
-            byte[] coverArt = CoverArtThread.imageByte;
+		try {
+			String bandArtist = FXController.bandArtist;
+			String songTitle = FXController.songTitle;
+			String albumTitle = FXController.albumTitle;
+			String albumYear = FXController.albumYear;
+			String genre = FXController.genre;
+			byte[] coverArt = CoverArtThread.imageByte;
 
-            progressBar.setVisible(true);
+			progressBar.setVisible(true);
 
-            File file = new File(tmpDir + "/SongSea/");
-            file.mkdirs();
+			File file = new File(tmpDir + "/SongSea/");
+			file.mkdirs();
 
-            // download file
-            final URL url = new URL("http://pleer.com/browser-extension/files/" + FXController.fileList.get(FXController.fileCounter) + ".mp3");
+			// download file
+			final URL url = new URL(FXController.downloadList.get(FXController.fileCounter));
+		
+			// URLConnection urlConnection = url.openConnection();
+			HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+			HttpURLConnection.setFollowRedirects(true);
+			urlConnection.setFollowRedirects(true);
+			urlConnection.addRequestProperty("User-Agent",
+					"Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:64.0) Gecko/20100101 Firefox/64.0");
+			//urlConnection.addRequestProperty("Accept", "application/json, text/javascript, *//*;q=0.01");
 
-            URLConnection urlConnection = url.openConnection();
-            urlConnection.addRequestProperty("User-Agent", "Mozilla/5.0 (Windows; U; Windows NT 6.1; en-GB;     rv:1.9.2.13) Gecko/20101203 Firefox/3.6.13 (.NET CLR 3.5.30729)");
-            urlConnection.connect();
+		//	urlConnection.setRequestProperty("Content-Type", "application/json");
+			// urlConnection.addRequestProperty("Accept", "application/json");
+			urlConnection.addRequestProperty("Accept-Language", "en-GB,en;q=0.5");
+			//urlConnection.addRequestProperty("Accept-Encoding", "gzip, deflate, br");
+			//urlConnection.addRequestProperty("Host", "api-2.datmusic.xyz");
+			//urlConnection.addRequestProperty("Origin", "https://datmusic.xyz");
+			//urlConnection.addRequestProperty("Referer", "https://datmusic.xyz/");
 
-            int size = urlConnection.getContentLength();
-            //FileUtils.copyURLToFile(url, file);
+			urlConnection.addRequestProperty("DNT", "1");
+			urlConnection.addRequestProperty("Connection", "keep-alive");
+			urlConnection.addRequestProperty("Pragma", "no-cache");
+			urlConnection.addRequestProperty("Cache-Control", "no-cache");
+			//urlConnection.setRequestMethod("GET");// test
 
-            System.out.println(size);
+			urlConnection.connect();
+			int responseCode = urlConnection.getResponseCode();
+			if (responseCode == HttpURLConnection.HTTP_OK) {
 
-            BufferedInputStream in = new BufferedInputStream(urlConnection.getInputStream());
-            FileOutputStream fout = new FileOutputStream(tmpDir + "/SongSea/temp.mp3");
-            byte data[] = new byte[1024];
-            int count;
-            double sumCount = 0.0;
+				size = urlConnection.getContentLength();
+				in = new BufferedInputStream(urlConnection.getInputStream());
+			} else {
 
-            while ((count = in.read(data, 0, 1024)) != -1) {
-                fout.write(data, 0, count);
+				size = urlConnection.getContentLength();
+				// FileUtils.copyURLToFile(url, file);
 
-                sumCount += count;
-                if (size > 0) {
-                    progressBar.setProgress(sumCount / size);
-                }
-            }
+				String ur = urlConnection.getURL().toExternalForm();
+				ur = ur.replaceAll(" ", "%20");// bad way !!!
+				/*
+				 * 
+				 * please use URI uri = new URI( "http", "search.barnesandnoble.com",
+				 * "/booksearch/first book.pdf", null); URL url = uri.toURL();
+				 * 
+				 * or String request = uri.toASCIIString();
+				 */
+				URL url2 = new URL(ur);
+				urlConnection.disconnect();
+				URLConnection downloadURL = url2.openConnection();
 
-            Mp3File mp3file = new Mp3File(tmpDir + "/SongSea/temp.mp3");
-            mp3file.removeId3v1Tag();
-            mp3file.removeId3v2Tag();
+				downloadURL.addRequestProperty("User-Agent",
+						"Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:64.0) Gecko/20100101 Firefox/64.0");
+				downloadURL.addRequestProperty("Accept", "application/json, text/javascript, *//*;q=0.01");
 
-            // insert metadata
-            ID3v2 id3v2Tag = new ID3v23Tag();
-            mp3file.setId3v2Tag(id3v2Tag);
-            id3v2Tag.setArtist(bandArtist);
-            id3v2Tag.setTitle(songTitle);
-            if (!"".equals(FXController.albumTitle)) {
-                id3v2Tag.setAlbum(albumTitle);
-            }
-            id3v2Tag.setYear(albumYear);
-            try {
-                id3v2Tag.setGenreDescription(genre);
-            } catch (IllegalArgumentException e) {
-                System.err.println("Can't set genre");
-            }
-            id3v2Tag.setAlbumImage(coverArt, "image/jpeg");
+				// downloadURL.setRequestProperty("Content-Type", "application/json");
+				// urlConnection.addRequestProperty("Accept", "application/json");
+				downloadURL.setRequestProperty("Content-Type", "File");
+				downloadURL.addRequestProperty("Accept-Language", "en-GB,en;q=0.5");
+				downloadURL.addRequestProperty("Accept-Encoding", "gzip, deflate, br");
+				//downloadURL.addRequestProperty("Host", "api-2.datmusic.xyz");
+			//	downloadURL.addRequestProperty("Origin", "https://datmusic.xyz");
+			//	downloadURL.addRequestProperty("Referer", "https://datmusic.xyz/");
 
-            mp3file.save(FXController.folderDirectory + songTitle + ".mp3");
+				downloadURL.addRequestProperty("DNT", "1");
+				downloadURL.addRequestProperty("Connection", "keep-alive");
+				downloadURL.addRequestProperty("Pragma", "no-cache");
+				downloadURL.addRequestProperty("Cache-Control", "no-cache");
 
-            new File(tmpDir + "/SongSea").delete();
+				downloadURL.connect();
+				
+				int size = downloadURL.getContentLength();
+				System.out.println(size);
 
-            progressBar.setVisible(false);
-            progressBar.setProgress(0);
-            downloading = false;
+				in = new BufferedInputStream(downloadURL.getInputStream());
+			}
 
-        } catch (IOException | UnsupportedTagException | InvalidDataException | NotSupportedException e) {
-            e.printStackTrace();
-        }
-    }
+			if (in.available() > 0) {
+				FileOutputStream fout = new FileOutputStream(tmpDir + "/SongSea/temp.mp3");
+				byte data[] = new byte[1024];
+				int count;
+				double sumCount = 0.0;
+
+				while ((count = in.read(data, 0, 1024)) != -1) {
+					fout.write(data, 0, count);
+
+					sumCount += count;
+					if (size > 0) {
+						progressBar.setProgress(sumCount / size);
+					}
+				}
+
+				Mp3File mp3file = new Mp3File(tmpDir + "/SongSea/temp.mp3");
+				mp3file.removeId3v1Tag();
+				mp3file.removeId3v2Tag();
+
+				// insert metadata
+				ID3v2 id3v2Tag = new ID3v23Tag();
+				mp3file.setId3v2Tag(id3v2Tag);
+				id3v2Tag.setArtist(bandArtist);
+				id3v2Tag.setTitle(songTitle);
+				if (!"".equals(FXController.albumTitle)) {
+					id3v2Tag.setAlbum(albumTitle);
+				}
+				id3v2Tag.setYear(albumYear);
+				try {
+					id3v2Tag.setGenreDescription(genre);
+				} catch (IllegalArgumentException e) {
+					System.err.println("Can't set genre");
+				}
+				id3v2Tag.setAlbumImage(coverArt, "image/jpeg");
+
+				mp3file.save(FXController.folderDirectory +bandArtist+"-"+ songTitle + ".mp3");
+
+				new File(tmpDir + "/SongSea").delete();
+
+				progressBar.setVisible(false);
+				progressBar.setProgress(0);
+				downloading = false;
+				fout.close();
+				in.close();
+			//	this.interrupt();//test
+			}
+		} catch (IOException | UnsupportedTagException | InvalidDataException | NotSupportedException e) {
+			e.printStackTrace();
+		}
+	}
 
 }

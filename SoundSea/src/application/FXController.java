@@ -7,9 +7,16 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import javax.imageio.ImageIO;
-import jaco.mp3.player.MP3Player;
+
+import intnet.Connection;
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
+import javafx.concurrent.Task;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -23,11 +30,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -35,249 +41,430 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javazoom.jl.decoder.JavaLayerException;
+import threadHandles.CoverArtThread;
 import threadHandles.DownloadThread;
+import threadHandles.SearchThread;
 import threadHandles.SongControl;
 
 public class FXController implements Initializable {
 
-    @FXML
-    private TextField getSearchField;
-    @FXML
-    private TextArea songLabelText;
-    @FXML
-    private ImageView albumArt;
-    @FXML
-    private ImageView loadingImage;
-    @FXML
-    private ProgressBar progressBar;
-    @FXML
-    private Button playButton;
-    @FXML
-    private Button pauseButton;
-    @FXML
-    private Button rightSearch;
-    @FXML
-    private Button leftSearch;
+	@FXML
+	private TextField getSearchField;
+	@FXML
+	private TextArea songLabelText;
+	@FXML
+	private ImageView albumArt;
+	@FXML
+	private ImageView loadingImage;
+	@FXML
+	private ProgressBar progressBar;
+	@FXML
+	private Button playButton;
+	@FXML
+	private Button pauseButton;
+	@FXML
+	private Button rightSearch;
+	@FXML
+	private Button leftSearch;
+	@FXML
+	private Button getSearchButton;
+	@FXML
+	private Button downloadButton;
+	@FXML
+	private Button getLyricsButton;
 
-    public static String songFullTitle = "";
-    public static String songTitle = "";
-    public static String albumTitle = "";
-    public static String bandArtist = "";
-    public static String albumYear = "";
-    public static String coverArtUrl = "";
-    public static String genre = "";
+	public static String songFullTitle = "";
+	public static String songTitle = "";
+	public static String albumTitle = "";
+	public static String bandArtist = "";
+	public static String albumYear = "";
+	public static String coverArtUrl = "";
+	public static String genre = "";
 
-    public static String folderDirectory = "";
+	public static String folderDirectory = "";
 
-    public static List<String> googleImgURLResults = null;
-    public static List<String> imageURLs = new ArrayList<>();
-    public static List<String> fileList = new ArrayList<>();
-    public static List<String> fullTitleList = new ArrayList<>();
-    public static List<String> qualityList = new ArrayList<>();
+	public static List<String> googleImgURLResults = null;
+	public static List<String> imageURLs = new ArrayList<>();
+	public static List<String> artistList = new ArrayList<>();
+	public static List<String> titleList = new ArrayList<>();
+	public static List<String> streamList = new ArrayList<>();
+	public static List<String> downloadList = new ArrayList<>();
 
-    public static int imageIndex = 0;
-    public static WritableImage greyImage;
-    public static String qualityLevel;
-    public static int songTime = 0;
+	public static int imageIndex = 0;
+	public static WritableImage greyImage;
+	public static String qualityLevel;
+	public static int songTime = 0;
+	public static SongControl sc = null;
+	int currSong = 0;
+	public static transient boolean isFinished = false;
+	public static CountDownLatch latch = null;
+	public Thread t = null;
+	public static ExecutorService exec = null;
+	public static Task<Void> task = null;
 
-    private final MP3Player mp3player = null;
-    public static Boolean songPlaying = false;
-    public static int fileCounter = 0;
+	public static int fileCounter = 0;
 
-    @FXML
-    private void handleQuickDownloadAction(ActionEvent event) throws IOException, InterruptedException {
+	@FXML
+	private void handleQuickDownloadAction(ActionEvent event) throws IOException, InterruptedException {
 
-        threadHandles.SearchThread st = new threadHandles.SearchThread(getSearchField, songLabelText, albumArt, loadingImage, true, progressBar, playButton, pauseButton, leftSearch, rightSearch);
-        st.start();
-    }
+		threadHandles.SearchThread st = new threadHandles.SearchThread(getSearchField, songLabelText, albumArt,
+				loadingImage, true, progressBar, playButton, pauseButton, leftSearch, rightSearch);
+		st.start();
 
-    @FXML
-    private void handleSearchAction(ActionEvent event) throws IOException, InterruptedException {
+	}
 
-        threadHandles.SearchThread st = new threadHandles.SearchThread(getSearchField, songLabelText, albumArt, loadingImage, false, progressBar, playButton, pauseButton, leftSearch, rightSearch);
-        st.start();
-    }
+	@FXML
+	private void handleSearchAction(ActionEvent event) throws IOException, InterruptedException {
 
-    @FXML
-    private void handleDownloadAction(ActionEvent event) throws IOException, InterruptedException {
+		if (downloadButton.disableProperty().get())
+			downloadButton.disableProperty().setValue(false);
+		if (getLyricsButton.disableProperty().get())
+			getLyricsButton.disableProperty().setValue(false);
+		if (SongControl.playerStatus == SongControl.PLAYING || SongControl.playerStatus == SongControl.PAUSED)
+			sc.stop();
 
-        if (songLabelText.getText().isEmpty()) {
-            return;
-        }
+		threadHandles.SearchThread st = new threadHandles.SearchThread(getSearchField, songLabelText, albumArt,
+				loadingImage, false, progressBar, playButton, pauseButton, leftSearch, rightSearch);
+		st.start();
 
-        downloadSong(progressBar);
-    }
+	}
 
-    public static void downloadSong(ProgressBar progressBar) throws IOException, InterruptedException {
+	@FXML
+	private void handleDownloadAction(ActionEvent event) throws IOException, InterruptedException {
 
-        if (DownloadThread.downloading) {
-            return;
-        }
-        threadHandles.DownloadThread dt = new threadHandles.DownloadThread(fullTitleList.get(0), progressBar);
-        dt.start();
-    }
+		if (songLabelText.getText().isEmpty() || FXController.downloadList.size() < 1) {
+			return;
+		}
 
-    @FXML
-    private void handleCloseAction(ActionEvent event) {
-        Platform.exit();
-    }
+		downloadSong(progressBar);
+	}
 
-    @FXML
-    private void handlePlayButton(ActionEvent event) throws MalformedURLException, IOException, JavaLayerException {
+	public static void downloadSong(ProgressBar progressBar) throws IOException, InterruptedException {
 
-        int currSong = 0;
+		if (DownloadThread.downloading) {
+			return;
+		}
+		threadHandles.DownloadThread dt = new threadHandles.DownloadThread(titleList.get(0), progressBar);
+		dt.start();
+	}
 
-        if (!songPlaying) {
-            String song = fileList.get(fileCounter);
-            SongControl sc = new SongControl(mp3player, song);
-            sc.start();
-            songPlaying = true;
-            pauseButton.setVisible(true);
-            playButton.setVisible(false);
-        } else if (currSong == fileCounter) {
-            SongControl.resumeSong();
-            playButton.setVisible(false);
-            pauseButton.setVisible(true);
-        } else {
-            String song = fileList.get(fileCounter);
-            SongControl sc = new SongControl(mp3player, song);
-            sc.start();
-            songPlaying = true;
-            pauseButton.setVisible(true);
-            playButton.setVisible(false);
-        }
-    }
+	@FXML
+	private void handleCloseAction(ActionEvent event) {
+		if (sc != null) {
+			sc.stop();
+			sc.close();
+		}
+		if (t != null)
+			t.interrupt();
+		if (task != null) {
+			task.cancel();
+		}
+		if (exec != null)
+			exec.shutdownNow();
 
-    @FXML
-    private void handlePauseButton(ActionEvent event) throws JavaLayerException {
+		Platform.exit();
+	}
 
-        SongControl.pauseSong();
-        playButton.setVisible(true);
-        pauseButton.setVisible(false);
+	@FXML
+	private void handlePlayButton(ActionEvent event) throws MalformedURLException, IOException, JavaLayerException {
 
-    }
+		if (exec == null)
+			exec = Executors.newSingleThreadExecutor();
+		task = new Task<Void>() {
 
-    @FXML
-    private void handleLeftSearch(ActionEvent event) throws JavaLayerException {
+			@Override
+			protected Void call() throws Exception {
+				exec.submit(() -> {
 
-        if (fileCounter == 0) {
-            fileCounter = fullTitleList.size() - 1;
-        } else {
-            fileCounter--;
-        }
-        System.out.println(fileCounter);
+					t = new Thread(new Runnable() {
 
-        songLabelText.setText("[" + qualityList.get(fileCounter) + "] " + fullTitleList.get(fileCounter));
-    }
+						@Override
+						public void run() {
 
-    @FXML
-    private void handleRightSearch(ActionEvent event) throws JavaLayerException {
-        if (fileCounter == fullTitleList.size() - 1) {
-            fileCounter = 0;
-        } else {
-            fileCounter++;
-        }
-        System.out.println(fileCounter);
+							try {
+								sc = new SongControl(streamList.get(fileCounter), songLabelText);
 
-        songLabelText.setText("[" + qualityList.get(fileCounter) + "] " + fullTitleList.get(fileCounter));
+								currSong = fileCounter;
 
-    }
+								sc.play();
+								latch = new CountDownLatch(1);
 
-    @FXML
-    private void handleMinimizeAction(ActionEvent event) {
-        Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-        stage.setIconified(true);
-    }
+								new Thread(new Runnable() {
 
-    @FXML
-    private void handleSettings(ActionEvent event) throws IOException {
+									@Override
+									public void run() {
+										// TODO Auto-generated method stub
+										try {
+											latch.await();
+										} catch (InterruptedException e) {
+										}
+										Platform.runLater(new Runnable() {
+											public void run() {
 
-        Platform.runLater(() -> {
-            try {
-                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/settings/settings.fxml"));
-                Parent root = fxmlLoader.load();
-                Stage stage = new Stage();
-                stage.initModality(Modality.NONE);
-                stage.initStyle(StageStyle.UNDECORATED);
+												pauseButton.setVisible(false);
+												playButton.setVisible(true);
+											}
+										});
 
-                Scene scene = new Scene(root, 444, 159);
-                scene.getStylesheets().add(getClass().getResource("/application/application.css").toExternalForm());
+									}
+								}).start();
 
-                Rectangle rect = new Rectangle(444, 159);
-                rect.setArcHeight(10);
-                rect.setArcWidth(10);
-                root.setClip(rect);
-                scene.setFill(Color.TRANSPARENT);
-                stage.setScene(scene);
-                stage.initStyle(StageStyle.TRANSPARENT);
-                addDragListeners(root, stage);
-                stage.show();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
+							} catch (IOException | JavaLayerException e) {
 
-    }
+								e.printStackTrace();
+							}
+						}
+					});
+					if (SongControl.playerStatus == SongControl.NOTSTARTED || currSong != fileCounter
+							|| SongControl.playerStatus == SongControl.FINISHED) {
+						t.start();
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
+						Platform.runLater(new Runnable() {
+							public void run() {
 
-        progressBar.setVisible(false);
-        loadingImage.setVisible(false);
-        getSearchField.setStyle("-fx-text-inner-color: #909090");
+								pauseButton.setVisible(true);
+								playButton.setVisible(false);
 
-        setCoverArtGreyBlock();
+							}
+						});
+					}
 
-        playButton.setVisible(false);
-        pauseButton.setVisible(false);
-        songLabelText.setEditable(false);
-        rightSearch.setVisible(false);
-        leftSearch.setVisible(false);
+					else if (currSong == fileCounter && SongControl.playerStatus == SongControl.PAUSED) {
 
-        BufferedImage image = null;
-        try {
-            image = ImageIO.read(getClass().getClassLoader().getResource("resources/placeholder.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        Image test = SwingFXUtils.toFXImage(image, null);
-        albumArt.setImage(test);
+						sc.resume();
+						Platform.runLater(new Runnable() {
+							public void run() {
 
-        getSearchField.setOnKeyPressed((KeyEvent ke) -> {
-            if (ke.getCode().equals(KeyCode.ENTER)) {
-                threadHandles.SearchThread st = new threadHandles.SearchThread(getSearchField, songLabelText, albumArt, loadingImage, false, progressBar, playButton, pauseButton, leftSearch, rightSearch);
-                st.start();
-            }
-        });
+								pauseButton.setVisible(true);
+								playButton.setVisible(false);
+							}
+						});
 
-    }
+					} /* else if(currSong!=fileCounter) */
 
-    public void setCoverArtGreyBlock() {
-        Rectangle clip = new Rectangle(albumArt.getFitWidth(), albumArt.getFitHeight());
-        clip.setArcWidth(20);
-        clip.setArcHeight(20);
-        albumArt.setClip(clip);
+				});
+				return null;
+			}
 
-        SnapshotParameters parameters = new SnapshotParameters();
-        parameters.setFill(Color.rgb(241, 241, 241));
-        greyImage = albumArt.snapshot(parameters, null);
+		};
+		task.run();
 
-        albumArt.setImage(greyImage);
-    }
+	}
 
-    double x, y;
+	@FXML
+	private void handlePauseButton(ActionEvent event) throws JavaLayerException {
+		if (sc != null)
+			sc.pause();
 
-    private void addDragListeners(final Node n, Stage primaryStage) {
+		pauseButton.setVisible(false);
+		playButton.setVisible(true);
 
-        n.setOnMousePressed((MouseEvent mouseEvent) -> {
-            this.x = n.getScene().getWindow().getX() - mouseEvent.getScreenX();
-            this.y = n.getScene().getWindow().getY() - mouseEvent.getScreenY();
-        });
+	}
 
-        n.setOnMouseDragged((MouseEvent mouseEvent) -> {
-            primaryStage.setX(mouseEvent.getScreenX() + this.x);
-            primaryStage.setY(mouseEvent.getScreenY() + this.y);
-        });
-    }
+	@FXML
+	private void handleLeftSearch(ActionEvent event) throws JavaLayerException, InterruptedException {
+		rightSearch.disableProperty().setValue(true);
+		leftSearch.disableProperty().setValue(true);
+		playButton.disableProperty().setValue(true);
+		loadingImage.disableProperty().setValue(true);
+		if (fileCounter == 0) {
+			fileCounter = titleList.size() - 1;
+		} else {
+			fileCounter--;
+		}
+		System.out.println(fileCounter);
+		if (sc != null) {
+			sc.stop();
+			sc.close();
+		}
+		if (task != null) {
+			task.cancel();
+		}
+
+		playButton.setVisible(true);
+		pauseButton.setVisible(false);
+		// songLabelText.setText("[" + qualityList.get(fileCounter) + "] " +
+		// fullTitleList.get(fileCounter));
+		songLabelText.setText("[" + artistList.get(fileCounter) + "] " + titleList.get(fileCounter));
+		songLabelText.setTooltip(new Tooltip(artistList.get(fileCounter) + "-" + titleList.get(fileCounter)));
+		String query = FXController.artistList.get(fileCounter) + "+" + FXController.titleList.get(fileCounter);
+		try {
+			boolean isValidSong = Connection.getiTunesSongInfo(query, songLabelText);
+			if (isValidSong) {
+				CoverArtThread cat = new CoverArtThread();
+				SearchThread.image = null;
+				cat.start();
+				while (SearchThread.image == null)
+					Thread.sleep(300);// countdowntimer
+				loadingImage.disableProperty().setValue(false);
+				albumArt.setImage(SearchThread.image);
+			}
+
+		} catch (IOException e) {
+
+			e.printStackTrace();
+		}
+		rightSearch.disableProperty().setValue(false);
+		leftSearch.disableProperty().setValue(false);
+		playButton.disableProperty().setValue(false);
+	}
+
+	@FXML
+	private void handleRightSearch(ActionEvent event) throws JavaLayerException, InterruptedException {
+		rightSearch.disableProperty().setValue(true);
+		leftSearch.disableProperty().setValue(true);
+		playButton.disableProperty().setValue(true);
+		loadingImage.disableProperty().setValue(true);
+		if (fileCounter == titleList.size() - 1) {
+			fileCounter = 0;
+		} else {
+			fileCounter++;
+		}
+		System.out.println(fileCounter);
+		if (sc != null) {
+			sc.stop();
+			sc.close();
+		}
+		if (task != null)
+			task.cancel();
+
+		playButton.setVisible(true);
+		pauseButton.setVisible(false);
+
+		songLabelText.setText("[" + artistList.get(fileCounter) + "] " + titleList.get(fileCounter));
+		songLabelText.setTooltip(new Tooltip(artistList.get(fileCounter) + "-" + titleList.get(fileCounter)));
+		String query = FXController.artistList.get(fileCounter) + "+" + FXController.titleList.get(fileCounter);
+		try {
+			boolean isValidSong = Connection.getiTunesSongInfo(query, songLabelText);
+			if (isValidSong) {
+				CoverArtThread cat = new CoverArtThread();
+				SearchThread.image = null;
+				cat.start();
+				while (SearchThread.image == null)
+					Thread.sleep(300);// countdowntimer
+				loadingImage.disableProperty().setValue(false);
+				albumArt.setImage(SearchThread.image);
+			}
+		} catch (IOException e) {
+
+			e.printStackTrace();
+		}
+		rightSearch.disableProperty().setValue(false);
+		leftSearch.disableProperty().setValue(false);
+		playButton.disableProperty().setValue(false);
+	}
+
+	@FXML
+	private void handleMinimizeAction(ActionEvent event) {
+		Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+		stage.setIconified(true);
+	}
+
+	@FXML
+	private void handleSettings(ActionEvent event) throws IOException {
+
+		Platform.runLater(() -> {
+			try {
+				FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/settings/settings.fxml"));
+				Parent root = fxmlLoader.load();
+				Stage stage = new Stage();
+
+				stage.initModality(Modality.NONE);
+				stage.initStyle(StageStyle.UTILITY);
+
+				Scene scene = new Scene(root, 444, 159);
+				scene.getStylesheets().add(getClass().getResource("/application/application.css").toExternalForm());
+
+				Rectangle rect = new Rectangle(444, 159);
+				rect.setArcHeight(10);
+				rect.setArcWidth(10);
+				root.setClip(rect);
+				scene.setFill(Color.TRANSPARENT);
+				stage.setScene(scene);
+				stage.initStyle(StageStyle.TRANSPARENT);
+				addDragListeners(root, stage);
+				stage.show();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		});
+
+	}
+
+	@Override
+	public void initialize(URL location, ResourceBundle resources) {
+
+		progressBar.setVisible(false);
+		loadingImage.setVisible(false);
+		getSearchField.setStyle("-fx-text-inner-color: #909090");
+
+		setCoverArtGreyBlock();
+
+		playButton.setVisible(false);
+		pauseButton.setVisible(false);
+		songLabelText.setEditable(false);
+		rightSearch.setVisible(false);
+		leftSearch.setVisible(false);
+
+		getSearchButton.setDefaultButton(true);
+		downloadButton.disableProperty().setValue(true);
+		getLyricsButton.disableProperty().setValue(true);
+
+		getSearchButton.disableProperty()
+				.bind(Bindings.createBooleanBinding(
+						() -> getSearchField.getText().trim().isEmpty() || getSearchField.getText().trim().length() < 2,
+						getSearchField.textProperty()));
+
+		BufferedImage image = null;
+		try {
+			image = ImageIO.read(getClass().getClassLoader().getResource("resources/placeholder.png"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		Image test = SwingFXUtils.toFXImage(image, null);
+		albumArt.setImage(test);
+
+		/*
+		 * getSearchField.setOnKeyPressed((KeyEvent ke) -> { if
+		 * (ke.getCode().equals(KeyCode.ENTER)) { threadHandles.SearchThread st = new
+		 * threadHandles.SearchThread(getSearchField, songLabelText, albumArt,
+		 * loadingImage, false, progressBar, playButton, pauseButton, leftSearch,
+		 * rightSearch); st.start(); } });
+		 */
+
+	}
+
+	public void setCoverArtGreyBlock() {
+		Rectangle clip = new Rectangle(albumArt.getFitWidth(), albumArt.getFitHeight());
+		clip.setArcWidth(20);
+		clip.setArcHeight(20);
+		albumArt.setClip(clip);
+
+		SnapshotParameters parameters = new SnapshotParameters();
+		parameters.setFill(Color.rgb(241, 241, 241));
+		greyImage = albumArt.snapshot(parameters, null);
+
+		albumArt.setImage(greyImage);
+	}
+
+	double x, y;
+
+	private void addDragListeners(final Node n, Stage primaryStage) {
+
+		n.setOnMousePressed((MouseEvent mouseEvent) -> {
+			this.x = n.getScene().getWindow().getX() - mouseEvent.getScreenX();
+			this.y = n.getScene().getWindow().getY() - mouseEvent.getScreenY();
+		});
+
+		n.setOnMouseDragged((MouseEvent mouseEvent) -> {
+			primaryStage.setX(mouseEvent.getScreenX() + this.x);
+			primaryStage.setY(mouseEvent.getScreenY() + this.y);
+		});
+	}
+
+	public void reset() {
+		pauseButton.setVisible(false);
+		playButton.setVisible(true);
+	}
 
 }
