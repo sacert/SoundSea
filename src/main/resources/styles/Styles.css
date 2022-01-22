@@ -1,0 +1,266 @@
+.root {
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+}
+
+
+.rootPane {
+    -fx-border-color: gray;
+    -fx-border-style: solid;
+    -fx-border-width: 1;
+    -fx-background-color: white;
+}
+
+.searchBar {
+    -fx-text-box-border: transparent;
+    -fx-background-color: f1f1f1;
+    -fx-background-insets: 0;
+
+}
+
+.searchBar:focused {
+    -fx-focus-color: transparent;
+}
+
+.buttons {
+    -fx-text-box-border: transparent;
+    -fx-background-color: f1f1f1;
+    -fx-background-insets: 0;
+    -fx-background-radius: 5;
+
+}
+
+.buttonClick {
+
+}
+.buttonClick:hover {
+    -fx-text-box-border: transparent;
+    -fx-background-color: d8d8d8;
+    -fx-background-insets: 0;
+    -fx-background-radius: 5;
+    -fx-padding: 1 3 1 3;
+}
+
+.title {
+    -fx-text-box-border: transparent;
+    -fx-background-color: transparent;
+    -fx-background-radius: 5;
+    -fx-background-image: url("../icon/settingsIconIdle.png");
+    -fx-background-position: left top, center;
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: cover, auto;
+    
+}
+
+.title:hover {
+    -fx-background-image: url("../icon/settingsIconHover.png");
+    -fx-background-position: left top, center;
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: cover, auto;	
+}
+
+.coverArtViewer {
+    -fx-border-radius: 10;
+}
+
+.downloadButton {
+    -fx-background-image: url("../icon/downloadButton.jpg");
+    -fx-background-position: left top, center;
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: cover, auto;
+    -fx-padding: 0.5 2 0.5 2;
+}
+
+.downloadButton:hover {
+    -fx-background-image: url("../icon/hoverDownloadButton.jpg");
+    -fx-background-position: left top, center;
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: cover, auto;
+}
+
+.menuButton {
+    -fx-text-box-border: transparent;
+    -fx-background-insets: 0;
+    -fx-background-radius: 8;
+    -fx-background-color: white;
+}
+
+.menuButton:hover {
+    -fx-text-box-border: transparent;
+    -fx-background-color: d8d8d8;
+    -fx-background-insets: 0;
+    -fx-background-radius: 8;
+}
+
+.closeButton {
+    -fx-background-image: url("../icon/closeIconButton.png");
+    -fx-background-position: left top, center;
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: cover, auto;
+    -fx-padding: 0.5 2 0.5 2;
+}
+
+.minimizeButton {
+    -fx-background-image: url("../icon/minimizeIconButton.png");
+    -fx-background-position: left top, center;
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: cover, auto;
+    -fx-padding: 0.5 2 0.5 2;
+}
+
+.searchPopup {
+    -fx-text-box-border: transparent;
+    -fx-background-color: white;
+    -fx-background-insets: 0;
+    -fx-background-radius: 5;
+    -fx-padding: 1 3 1 3;
+    -fx-border-width: 3;
+    -fx-border-color: d8d8d8;
+    -fx-border-radius: 5;
+}
+
+.darkLayer {
+    -fx-background-color: black;
+    -fx-background-radius: 10;
+    -fx-opacity: 0.2;
+    -fx-border-radius: 10;
+}
+
+.loadingImage {
+    -fx-background-image: url("../icon/minimizeIconButton.png");
+}
+
+.progress-bar > .bar {
+    -fx-background-color: -fx-box-border, linear-gradient(to bottom, derive(-fx-accent, 95%), derive(-fx-accent,10%)), d8d8d8;
+    -fx-background-insets: 1 1 2 1;
+    -fx-padding: 0.30em;
+}
+
+
+
+.scrollText {
+    -fx-text-fill: #787878;
+    -fx-background-color: transparent;
+}
+
+.scrollText *.text {
+    -fx-text-alignment: center;
+}
+
+.scrollText .scroll-pane {
+    -fx-background-color:transparent;
+}
+
+.scrollText .scroll-pane .viewport{
+    -fx-background-color:transparent;
+}
+
+.scrollText .scroll-pane .content{
+    -fx-background-color:transparent;
+}
+
+.scrollText .scroll-pane {
+    -fx-background-color: transparent;
+}
+
+.scrollText .scroll-bar .increment-button {
+    visibility: hidden;
+}
+
+.scrollText .scroll-bar .decrement-button {
+    visibility: hidden;
+}
+
+.scrollText .scroll-bar:vertical,
+.scrollText .scroll-bar:horizontal {
+    -fx-background-color: transparent;
+}
+
+.scrollText .scroll-bar:vertical .track-background,
+.scrollText .scroll-bar:horizontal .track-background  {
+    visibility: hidden;
+}
+
+.scrollText .scroll-bar:vertical .track,
+.scrollText .scroll-bar:horizontal .track {
+    -fx-background-color: transparent;
+}
+
+.scrollText .hide-thumb .scroll-bar:vertical .thumb,
+.scrollText .hide-thumb .scroll-bar:horizontal .thumb {
+    -fx-background-color: transparent;
+}
+
+.scrollText .scroll-bar:vertical .thumb,
+.scrollText .scroll-bar:horizontal .thumb {
+    -fx-background-color: transparent;
+    -fx-background-insets: 2, 0, 0;
+    -fx-background-radius: 2;
+}
+
+.scrollText .scroll-bar .increment-arrow,
+.scrollText .scroll-bar .decrement-arrow {
+    -fx-background-color: transparent;
+    -fx-shape: " ";
+    -fx-padding:0;
+}
+
+.playButton {
+    -fx-background-image: url("../icon/play.png");
+    -fx-background-position: left top, center;
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: cover, auto;
+
+}
+.pauseButton {
+    -fx-background-image: url("../icon/pause.png");
+    -fx-background-position: left top, center;
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: cover, auto;
+
+}
+.playButton, .pauseButton{
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.4), 4, 0, 0, 2);
+
+}
+
+.songControl {
+    -fx-text-box-border: transparent;
+    -fx-background-radius: 5;
+    -fx-background-color: white;
+}
+
+.songControl:hover {
+    -fx-text-box-border: transparent;
+    -fx-background-color: e9e9e9;
+    -fx-background-insets: 0;
+    -fx-background-radius: 5;
+}
+
+.songListMove {
+ 
+    -fx-background-color: transparent;
+    -fx-text-fill: #787878;
+}
+.songListMove:hover {
+ 
+ -fx-background-color: -fx-shadow-highlight-color;
+}
+
+#bigfont{
+   -fx-font-size: 33;
+   -fx-padding: 0 0 0 4;
+}
+#bigfont2{
+    -fx-weight: bold;
+    -fx-font-size: 16;
+   
+}
+
+#bigfont3{
+    -fx-weight: bold;
+    -fx-font-size: 18
+}
+
+
+

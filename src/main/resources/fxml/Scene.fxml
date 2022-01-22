@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.Blend?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.paint.RadialGradient?>
+<?import javafx.scene.paint.Stop?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<Pane prefHeight="198.0" prefWidth="463.0" styleClass="rootPane" stylesheets="@../styles/Styles.css" xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.musicdwl.SoundSea.FXMLController">
+    <children>
+        <TextField id="bigfont" fx:id="getSearchField" layoutX="18.0" layoutY="34.0" prefHeight="55.0" prefWidth="268.0" promptText="Search" styleClass="searchBar" stylesheets="@/styles/Styles.css">
+         <effect>
+            <Blend />
+         </effect></TextField>
+        <ImageView fx:id="albumArt" fitHeight="146.0" fitWidth="146.0" layoutX="302.0" layoutY="32.0" pickOnBounds="true" preserveRatio="true" styleClass="coverArtViewer" />
+        <Button fx:id="getSearchButton" layoutX="156.0" layoutY="111.0" mnemonicParsing="false" onAction="#handleSearchAction" prefHeight="26.0" prefWidth="130.0" stylesheets="@/styles/Styles.css" text="Search" textFill="#787878">
+            <styleClass>
+                <String fx:value="buttons" />
+                <String fx:value="buttonClick" />
+            </styleClass>
+        </Button>
+        <Button fx:id="getLyricsButton" layoutX="18.0" layoutY="111.0" mnemonicParsing="false" onAction="#handleQuickDownloadAction" prefHeight="26.0" prefWidth="130.0" stylesheets="@/styles/Styles.css" text="Quick Download" textFill="#787878">
+            <styleClass>
+                <String fx:value="buttons" />
+                <String fx:value="buttonClick" />
+            </styleClass>
+        </Button>
+        <Button fx:id="downloadButton" layoutX="263.0" layoutY="155.0" mnemonicParsing="false" onAction="#handleDownloadAction" prefHeight="23.0" prefWidth="23.0" stylesheets="@/styles/Styles.css">
+            <styleClass>
+                <String fx:value="downloadButton" />
+                <String fx:value="buttons" />
+            </styleClass>
+        </Button>
+        <Pane fx:id="songLabelPane" layoutX="18.0" layoutY="155.0" prefHeight="22.0" prefWidth="234.0" styleClass="buttons" stylesheets="@/styles/Styles.css">
+            <children>
+                <Text fill="#787878" layoutX="7.0" layoutY="17.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="218.68292617797852" />
+                <TextArea fx:id="songLabelText" layoutX="21.0" layoutY="-2.0" prefHeight="62.0" prefWidth="190.0" styleClass="scrollText" />
+                <Button fx:id="rightSearch" layoutX="208.0" layoutY="-2.0" mnemonicParsing="false" onAction="#handleRightSearch" styleClass="songListMove" text="&gt;" />
+                <Button fx:id="leftSearch" layoutX="-1.0" layoutY="-2.0" mnemonicParsing="false" onAction="#handleLeftSearch" styleClass="songListMove" text="&lt;" />
+            </children>
+        </Pane>
+        <Button layoutX="437.0" layoutY="7.0" mnemonicParsing="false" onAction="#handleCloseAction" prefHeight="18.0" prefWidth="18.0" scaleX="0.8" scaleY="0.8" stylesheets="@/styles/Styles.css">
+            <styleClass>
+                <String fx:value="menuButton" />
+                <String fx:value="closeButton" />
+            </styleClass>
+          <!--  <padding>             
+           <Insets top="2.0" />
+            </padding>-->
+        </Button>
+        <Button layoutX="415.0" layoutY="7.0" mnemonicParsing="false" onAction="#handleMinimizeAction" prefHeight="18.0" prefWidth="18.0" scaleX="0.8" scaleY="0.8" stylesheets="@/styles/Styles.css">
+            <styleClass>
+                <String fx:value="menuButton" />
+                <String fx:value="minimizeButton" />
+            </styleClass>
+          <!--  <padding>
+                  <Insets top="2.0" />    
+            </padding>-->
+        </Button>
+        <ImageView fx:id="loadingImage" fitHeight="14.0" fitWidth="45.0" layoutX="355.0" layoutY="95.0" pickOnBounds="true" preserveRatio="true" styleClass="loadingImage">
+            <image>
+                <Image url="@../icon/loading.gif" />
+            </image>
+        </ImageView>
+        <ProgressBar fx:id="progressBar" layoutX="20.0" layoutY="184.0" prefHeight="6.0" prefWidth="423.0" progress="0.0" styleClass="progressBar" stylesheets="@/styles/Styles.css" />
+        <Button id="settings" fx:id="songSeaLogo" layoutY="0.5" mnemonicParsing="false" onAction="#handleSettings" prefHeight="34.0" prefWidth="32.0" scaleX="0.6" scaleY="0.6" textFill="#787878">
+        
+            <styleClass>
+                <String fx:value="title" />
+                <String fx:value="titleClick" />
+            </styleClass>
+        </Button>
+        <Label id="bigfont2" layoutX="198.0" layoutY="6.0" text="Sound Sea">
+
+            <textFill>
+                <RadialGradient centerX="0.5224719101123596" centerY="0.5192307692307693" focusDistance="0.2142857142857144" radius="0.5">
+                    <stops>
+                        <Stop color="#0083ff69" />
+                        <Stop color="#9892bc9e" offset="1.0" />
+                    </stops>
+                </RadialGradient>
+            </textFill>
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font>
+        </Label>
+        <Button fx:id="playButton" layoutX="419.0" layoutY="149.0" mnemonicParsing="false" onAction="#handlePlayButton" prefHeight="25.0" prefWidth="25.0" scaleX="0.8" scaleY="0.8" stylesheets="@/styles/Styles.css">
+            <styleClass>
+                <String fx:value="songControl" />
+                <String fx:value="playButton" />
+            </styleClass>
+          <!--  <padding>
+                <Insets top="5.0" />
+            </padding>-->
+        </Button>
+        <Button fx:id="pauseButton" layoutX="419.0" layoutY="149.0" mnemonicParsing="false" onAction="#handlePauseButton" prefHeight="25.0" prefWidth="25.0" scaleX="0.8" scaleY="0.8" stylesheets="@/styles/Styles.css">
+           <!-- <padding>
+                <Insets top="5.0" />
+            </padding>-->
+            <styleClass>
+                <String fx:value="songControl" />
+                <String fx:value="pauseButton" />
+            </styleClass>
+        </Button>
+    </children>
+</Pane>
